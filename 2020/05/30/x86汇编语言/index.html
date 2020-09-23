@@ -1,0 +1,777 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="犇"><meta name="copyright" content="犇"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>x86汇编语言 | 🐂🐃🐄🦏</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.19/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>document.addEventListener("DOMContentLoaded", () => {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+});
+</script><link rel="shortcut icon" type="image/svg+xml" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"云游君的小站","version":"1.0.0","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><meta name="description" content="x86汇编语言课程概要 从汇编语言到c语言再到c++，本质上是编译器越来越强大了 C与C++其实没有本质区别，只是编译器做的事情越来越多了 C语言是学好C++的基础  进制与进制运算 二进制与十六进制  0000    0001    0010    0011      0100    0101    0110    0111  (半斤)  1000    1001    1010    10">
+<meta property="og:type" content="article">
+<meta property="og:title" content="x86汇编语言">
+<meta property="og:url" content="https://benbenit.cn/2020/05/30/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/index.html">
+<meta property="og:site_name" content="🐂🐃🐄🦏">
+<meta property="og:description" content="x86汇编语言课程概要 从汇编语言到c语言再到c++，本质上是编译器越来越强大了 C与C++其实没有本质区别，只是编译器做的事情越来越多了 C语言是学好C++的基础  进制与进制运算 二进制与十六进制  0000    0001    0010    0011      0100    0101    0110    0111  (半斤)  1000    1001    1010    10">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529112344054.png">
+<meta property="og:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529124800750.png">
+<meta property="og:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529130059204.png">
+<meta property="og:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529134547431.png">
+<meta property="og:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529134749992.png">
+<meta property="og:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529134926805.png">
+<meta property="og:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529161737635.png">
+<meta property="og:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529214616811.png">
+<meta property="og:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200530101117138.png">
+<meta property="article:published_time" content="2020-05-30T03:42:00.000Z">
+<meta property="article:modified_time" content="2020-08-15T03:37:31.689Z">
+<meta property="article:author" content="犇">
+<meta property="article:tag" content="汇编">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://benbenit.cn/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529112344054.png"><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.20.0/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="犇"><img width="96" loading="lazy" src="/Yun.png" alt="犇"></a><div class="site-author-name"><a href="/about/">犇</a></div><a class="site-name" href="/about/site.html">🐂🐃🐄🦏</a><sub class="site-subtitle">文字是有温度的</sub><div class="site-desciption">犇の博客</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">22</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">11</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">19</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://shang.qq.com/wpa/qunwpa?idkey=c929e704022704d8cced9ec355d44a3fa7ad34aea12cef1de03d75d3d7d5b059" title="QQ 群" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/YunYouJun" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://weibo.com/jizhideyunyoujun" title="微博" target="_blank" style="color:#E6162D"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-weibo-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.douban.com/people/yunyoujun/" title="豆瓣" target="_blank" style="color:#007722"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-douban-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=247102977" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/yunyoujun/" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/1579790" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://twitter.com/YunYouJun" title="Twitter" target="_blank" style="color:#1da1f2"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-twitter-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://t.me/elpsycn" title="Telegram Channel" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:me@yunyoujun.cn" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://travellings.now.sh/" title="Travelling" target="_blank" style="color:var(--hty-text-color)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-send-plane-2-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">x86汇编语言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E6%A6%82%E8%A6%81"><span class="toc-number">1.1.</span> <span class="toc-text">课程概要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E5%88%B6%E4%B8%8E%E8%BF%9B%E5%88%B6%E8%BF%90%E7%AE%97"><span class="toc-number">1.2.</span> <span class="toc-text">进制与进制运算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%AE%80%E5%86%99%E5%BD%A2%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">二进制简写形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%BD%E5%BA%A6"><span class="toc-number">1.4.</span> <span class="toc-text">数据宽度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0%E5%92%8C%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="toc-number">1.5.</span> <span class="toc-text">有符号数和无符号数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%A0%81%E5%8F%8D%E7%A0%81%E8%A1%A5%E7%A0%81"><span class="toc-number">1.6.</span> <span class="toc-text">原码反码补码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%8D%E4%BC%9A%E5%81%9A%E5%8A%A0%E6%B3%95"><span class="toc-number">1.7.</span> <span class="toc-text">计算机不会做加法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0%E6%90%AD%E5%BB%BA"><span class="toc-number">1.8.</span> <span class="toc-text">汇编学习搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.9.</span> <span class="toc-text">通用寄存器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MOV%E6%8C%87%E4%BB%A4"><span class="toc-number">1.9.1.</span> <span class="toc-text">MOV指令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">1.10.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E4%B8%AA%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E9%83%BD%E4%BC%9A%E6%9C%89%E8%87%AA%E5%B7%B1%E7%8B%AC%E7%AB%8B%E7%9A%844G%E7%9A%84%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4"><span class="toc-number">1.10.1.</span> <span class="toc-text">每个应用程序都会有自己独立的4G的内存空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80"><span class="toc-number">1.10.2.</span> <span class="toc-text">内存地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E5%86%85%E5%AD%98"><span class="toc-number">1.10.3.</span> <span class="toc-text">如何使用内存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%845%E7%A7%8D%E5%BD%A2%E5%BC%8F"><span class="toc-number">1.11.</span> <span class="toc-text">内存地址的5种形式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%A2%E5%BC%8F%E4%B8%80%EF%BC%9A-%E7%AB%8B%E5%8D%B3%E6%95%B0"><span class="toc-number">1.11.1.</span> <span class="toc-text">形式一：[立即数]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%A2%E5%BC%8F%E4%BA%8C%EF%BC%9A-reg"><span class="toc-number">1.11.2.</span> <span class="toc-text">形式二：[reg]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%A2%E5%BC%8F%E4%B8%89%EF%BC%9A-reg-%E7%AB%8B%E5%8D%B3%E6%95%B0"><span class="toc-number">1.11.3.</span> <span class="toc-text">形式三：[reg+立即数]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%A2%E5%BC%8F%E5%9B%9B%EF%BC%9A-reg-reg-1-2-4-8"><span class="toc-number">1.11.4.</span> <span class="toc-text">形式四：[reg+reg*{1,2,4,8}]*</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%A2%E5%BC%8F%E4%BA%94%EF%BC%9A-reg-reg-1-2-4-8-%E7%AB%8B%E5%8D%B3%E6%95%B0"><span class="toc-number">1.11.5.</span> <span class="toc-text">形式五：[reg+reg*{1,2,4,8}+立即数]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.11.6.</span> <span class="toc-text">数据存储模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%B1%87%E7%BC%96%E5%91%BD%E4%BB%A4"><span class="toc-number">1.12.</span> <span class="toc-text">常用汇编命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MOV%E6%8C%87%E4%BB%A4-ADD%E6%8C%87%E4%BB%A4-%E5%8A%A0-SUB%E6%8C%87%E4%BB%A4-%E5%87%8F"><span class="toc-number">1.12.1.</span> <span class="toc-text">MOV指令         ADD指令(加)    SUB指令(减)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AND%E6%8C%87%E4%BB%A4-%E4%B8%8E-OR%E6%8C%87%E4%BB%A4-%E6%88%96-XOR%E6%8C%87%E4%BB%A4-%E5%BC%82%E6%88%96"><span class="toc-number">1.12.2.</span> <span class="toc-text">AND指令(与)     OR指令(或)     XOR指令(异或)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NOT%E6%8C%87%E4%BB%A4-%E9%9D%9E"><span class="toc-number">1.12.3.</span> <span class="toc-text">NOT指令(非)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%A4%8D%E5%88%B6%E6%8C%87%E4%BB%A4"><span class="toc-number">1.12.4.</span> <span class="toc-text">内存复制指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MOVS%E6%8C%87%E4%BB%A4"><span class="toc-number">1.12.5.</span> <span class="toc-text">MOVS指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8EFL"><span class="toc-number">1.12.6.</span> <span class="toc-text">标志寄存器EFL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STOS%E6%8C%87%E4%BB%A4"><span class="toc-number">1.12.7.</span> <span class="toc-text">STOS指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#REP%E6%8C%87%E4%BB%A4"><span class="toc-number">1.12.8.</span> <span class="toc-text">REP指令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E6%A0%88%E7%9B%B8%E5%85%B3%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="toc-number">1.13.</span> <span class="toc-text">堆栈相关的指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A0%86%E6%A0%88"><span class="toc-number">1.13.1.</span> <span class="toc-text">什么是堆栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PUSH%E6%8C%87%E4%BB%A4"><span class="toc-number">1.13.2.</span> <span class="toc-text">PUSH指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POP%E6%8C%87%E4%BB%A4"><span class="toc-number">1.13.3.</span> <span class="toc-text">POP指令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9EIP%E6%8C%87%E4%BB%A4"><span class="toc-number">1.14.</span> <span class="toc-text">修改EIP指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JMP%E6%8C%87%E4%BB%A4"><span class="toc-number">1.14.1.</span> <span class="toc-text">JMP指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CALL%E6%8C%87%E4%BB%A4"><span class="toc-number">1.14.2.</span> <span class="toc-text">CALL指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RET%E6%8C%87%E4%BB%A4"><span class="toc-number">1.14.3.</span> <span class="toc-text">RET指令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95%EF%BC%9A%E5%8F%8D%E8%B0%83%E8%AF%95%E4%B9%8BFake-F8"><span class="toc-number">1.15.</span> <span class="toc-text">拓展：反调试之Fake F8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%87%E7%BC%96%E7%9C%BC%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">1.16.</span> <span class="toc-text">汇编眼中的函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%87%BD%E6%95%B0"><span class="toc-number">1.16.1.</span> <span class="toc-text">什么是函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8"><span class="toc-number">1.16.2.</span> <span class="toc-text">函数的调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E5%92%8C%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">1.16.3.</span> <span class="toc-text">参数和返回值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A0%86%E6%A0%88%E4%BC%A0%E5%8F%82"><span class="toc-number">1.16.4.</span> <span class="toc-text">堆栈传参</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E6%A0%88%E5%B9%B3%E8%A1%A1"><span class="toc-number">1.17.</span> <span class="toc-text">堆栈平衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A0%86%E6%A0%88%E5%B9%B3%E8%A1%A1"><span class="toc-number">1.17.1.</span> <span class="toc-text">什么是堆栈平衡</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95%EF%BC%9A%E5%A4%96%E6%8C%82%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.18.</span> <span class="toc-text">拓展：外挂是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ESP%E5%AF%BB%E5%9D%80"><span class="toc-number">1.19.</span> <span class="toc-text">ESP寻址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EBP%E5%AF%BB%E5%9D%80"><span class="toc-number">1.20.</span> <span class="toc-text">EBP寻址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JCC%E6%8C%87%E4%BB%A4"><span class="toc-number">1.21.</span> <span class="toc-text">JCC指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EFLAGS%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.21.1.</span> <span class="toc-text">EFLAGS寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CF%E4%BD%8D"><span class="toc-number">1.21.2.</span> <span class="toc-text">CF位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PF%E4%BD%8D"><span class="toc-number">1.21.3.</span> <span class="toc-text">PF位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AF%E4%BD%8D"><span class="toc-number">1.21.4.</span> <span class="toc-text">AF位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ZF%E4%BD%8D"><span class="toc-number">1.21.5.</span> <span class="toc-text">ZF位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SF%E4%BD%8D"><span class="toc-number">1.21.6.</span> <span class="toc-text">SF位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OF%E4%BD%8D"><span class="toc-number">1.21.7.</span> <span class="toc-text">OF位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DF%E4%BD%8D"><span class="toc-number">1.21.8.</span> <span class="toc-text">DF位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%80%BB%E7%BB%93"><span class="toc-number">1.21.9.</span> <span class="toc-text">一句话总结</span></a></li></ol></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://benbenit.cn/2020/05/30/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="犇"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="🐂🐃🐄🦏"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">x86汇编语言</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2020-05-30 11:42:00" itemprop="dateCreated datePublished" datetime="2020-05-30T11:42:00+08:00">2020-05-30</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <time title="修改时间：2020-08-15 11:37:31" itemprop="dateModified" datetime="2020-08-15T11:37:31+08:00">2020-08-15</time></div><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">编程语言</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E6%B1%87%E7%BC%96/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">汇编</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><a id="more"></a>
+
+<h1 id="x86汇编语言"><a href="#x86汇编语言" class="headerlink" title="x86汇编语言"></a>x86汇编语言</h1><h2 id="课程概要"><a href="#课程概要" class="headerlink" title="课程概要"></a>课程概要</h2><ul>
+<li>从汇编语言到c语言再到c++，本质上是编译器越来越强大了</li>
+<li>C与C++其实没有本质区别，只是编译器做的事情越来越多了</li>
+<li><strong>C语言是学好C++的基础</strong></li>
+</ul>
+<h2 id="进制与进制运算"><a href="#进制与进制运算" class="headerlink" title="进制与进制运算"></a>进制与进制运算</h2><ul>
+<li>二进制与十六进制</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token number">0000</span>    <span class="token number">0001</span>    <span class="token number">0010</span>    <span class="token number">0011</span>    
+
+<span class="token number">0100</span>    <span class="token number">0101</span>    <span class="token number">0110</span>    <span class="token number">0111</span>  <span class="token punctuation">(</span>半斤<span class="token punctuation">)</span>
+
+<span class="token number">1000</span>    <span class="token number">1001</span>    <span class="token number">1010</span>    <span class="token number">1011</span>    
+
+<span class="token number">1100</span>    <span class="token number">1101</span>    <span class="token number">1110</span>    <span class="token number">1111</span>  <span class="token punctuation">(</span>八两<span class="token punctuation">)</span>
+
+<span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span>
+记忆小技巧：
+<span class="token number">0F</span>    <span class="token number">1</span>E    <span class="token number">2</span>D    <span class="token number">3</span>C    <span class="token number">4</span>B    <span class="token number">5</span>A    <span class="token number">69</span>    <span class="token number">78</span></code></pre>
+
+
+<h2 id="二进制简写形式"><a href="#二进制简写形式" class="headerlink" title="二进制简写形式"></a>二进制简写形式</h2><ul>
+<li><p>计算机为什么使用二进制</p>
+<ul>
+<li>计算机是需要通电的，电路只有两种状态：1真(通电) 0假(未通电)</li>
+</ul>
+<ul>
+<li>计算机中存储的任何文件，接收的任何指令都是由0和1组成的</li>
+</ul>
+</li>
+<li><p>十六进制可以看成是二进制的简写</p>
+</li>
+</ul>
+<h2 id="数据宽度"><a href="#数据宽度" class="headerlink" title="数据宽度"></a>数据宽度</h2><ul>
+<li>在计算机中，由于受硬件制约，数据都是有长度限制的(我们称为数据宽度)</li>
+<li>位</li>
+<li>字节    0 ~ 0xFF</li>
+<li>字        0 ~ 0xFFFF</li>
+<li>双字    0 ~ 0xFFFF FFFF</li>
+</ul>
+<h2 id="有符号数和无符号数"><a href="#有符号数和无符号数" class="headerlink" title="有符号数和无符号数"></a>有符号数和无符号数</h2><ul>
+<li>不同的文件有不同的编码规则。比如说，是个文本文件就按照文本文件的规则去编码它，如果是个视频文件，就按照视频的规则去编码它。</li>
+</ul>
+<h2 id="原码反码补码"><a href="#原码反码补码" class="headerlink" title="原码反码补码"></a>原码反码补码</h2><ul>
+<li>也就是数据的存储格式</li>
+</ul>
+<h2 id="计算机不会做加法"><a href="#计算机不会做加法" class="headerlink" title="计算机不会做加法"></a>计算机不会做加法</h2><ul>
+<li><p>计算机只认识0和1，计算机能做的运算归根结底也就是对0和1做运算(通常称为位运算)</p>
+</li>
+<li><p>2 + 3         2 - 3        都是通过位运算实现的</p>
+<table>
+<thead>
+<tr>
+<th>语言</th>
+<th align="center">与</th>
+<th align="center">或</th>
+<th align="center">异或</th>
+<th align="center">非</th>
+<th align="center">左移</th>
+<th align="center">右移</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>汇编</td>
+<td align="center">and</td>
+<td align="center">or</td>
+<td align="center">xor</td>
+<td align="center">not</td>
+<td align="center">shl</td>
+<td align="center">无符号shr 有符号sar</td>
+</tr>
+<tr>
+<td>C语言</td>
+<td align="center">&amp;</td>
+<td align="center">|</td>
+<td align="center">^</td>
+<td align="center">~</td>
+<td align="center">&lt;&lt;</td>
+<td align="center">&gt;&gt;</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>加法</p>
+<ol>
+<li><p>异或</p>
+</li>
+<li><p>判断是否有进位，与，结果不为0，左移一位</p>
+</li>
+<li><p>移位的结果再次异或和第一步结果异或</p>
+</li>
+</ol>
+</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//4 + 5    &lt;==> 0100 + 0101</span>
+
+<span class="token number">1</span><span class="token punctuation">)</span>异或    
+<span class="token number">0100</span>
+<span class="token number">0101</span>
+<span class="token operator">--</span><span class="token operator">--</span>
+<span class="token number">0001</span>
+
+<span class="token number">2</span><span class="token punctuation">)</span>与    
+<span class="token number">0100</span>
+<span class="token number">0101</span>
+<span class="token operator">--</span><span class="token operator">--</span>
+<span class="token number">0100</span>
+<span class="token number">3</span><span class="token punctuation">)</span>与完结果不为<span class="token number">0</span><span class="token punctuation">,</span>左移             
+<span class="token number">1000</span>
+
+<span class="token number">4</span><span class="token punctuation">)</span>继续异或
+<span class="token number">0001</span>
+<span class="token number">1000</span>
+<span class="token operator">--</span><span class="token operator">--</span>
+<span class="token number">1001</span>
+
+<span class="token number">5</span><span class="token punctuation">)</span>判断进位
+<span class="token number">0001</span>
+<span class="token number">1000</span>
+<span class="token operator">--</span><span class="token operator">--</span>
+<span class="token number">0000</span>
+<span class="token number">6</span><span class="token punctuation">)</span>与完结果为<span class="token number">0</span> 
+<span class="token number">1001</span>即为最终结果</code></pre>
+
+<ul>
+<li><p>乘法的本质是加法</p>
+<ul>
+<li>X*Y 的本质就是 Y个X相加</li>
+</ul>
+</li>
+<li><p>除法的本质是减法</p>
+<ul>
+<li>X/Y 的本质就是 X能减去多少个Y</li>
+</ul>
+</li>
+</ul>
+<h2 id="汇编学习搭建"><a href="#汇编学习搭建" class="headerlink" title="汇编学习搭建"></a>汇编学习搭建</h2><ul>
+<li><p>在学习汇编之前要先搞清楚几个问题：</p>
+<ul>
+<li>我们学习的汇编用在什么地方</li>
+</ul>
+<ul>
+<li>初级班的汇编要学到什么程度</li>
+<li>在什么环境下学习汇编</li>
+</ul>
+</li>
+<li><p>学汇编不是为了写代码，后面写代码，做项目，没有必须写汇编实现的。<strong>学习汇编主要目的是为了理解程序是怎么运行的</strong></p>
+</li>
+<li><p>学汇编会痛苦几天，但受益是无穷的，汇编是高手进阶的必经之路</p>
+</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">       应用<span class="token operator">&lt;</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-></span>安全
+C语言<span class="token operator">&lt;</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-></span>汇编 <span class="token operator">&lt;</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-></span> 二进制</code></pre>
+
+<ul>
+<li>如果做普通的应用程序开发，懂C语言和汇编的对应关系就行了。别人调试不了的你可以调试</li>
+<li>如果从事安全相关的行业，比如外挂反外挂，病毒反病毒，就必须要懂汇编，以及汇编和二进制之间的关系</li>
+<li>基础班里的PE和硬编码部分就是讲二进制怎么变成汇编的。这部分就是面向想从事安全行业的人员准备的</li>
+<li>课堂上讲的是32位的汇编。学习要学到能够看懂普通的应用程序</li>
+<li>如果想学习操作系统的话，基础班的汇编是不够用的，中级班有一个月讲保护模式，这些学完了，这个时候再去学操作系统就没什么问题了</li>
+<li>DTDbug安装使用</li>
+</ul>
+<h2 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h2><ul>
+<li>计算机可以在3个地方存储数据，cpu，内存，硬盘</li>
+<li>所谓的寄存器就是CPU中用来存储数据的地方</li>
+</ul>
+<ul>
+<li>32位CPU：8 16 32<ul>
+<li>64位CPU：8 16 32 64</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>32位通用寄存器：EAX, ECX, EDX, EBX, ESP, EBP, ESI, EDI</li>
+<li>CPU中除了通用寄存器，还有其他的寄存器，比如说EIP，存储下一条指令的地址，而且只能做这一件事情，所以不能叫做通用寄存器。通用寄存器想存什么就存什么</li>
+</ul>
+<h3 id="MOV指令"><a href="#MOV指令" class="headerlink" title="MOV指令"></a>MOV指令</h3><img src="/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529112344054.png" alt="image-20200529112344054" style="zoom:50%;" / loading="lazy">
+
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ul>
+<li>上面讲完了通用寄存器，如果仅仅依靠寄存器来存数据是不够的。这个时候我们可以选择把数据存到内存当中</li>
+<li>在我们编程的时候说的内存和我们说的内存条不一样</li>
+</ul>
+<h3 id="每个应用程序都会有自己独立的4G的内存空间"><a href="#每个应用程序都会有自己独立的4G的内存空间" class="headerlink" title="每个应用程序都会有自己独立的4G的内存空间"></a>每个应用程序都会有自己独立的4G的内存空间</h3><ul>
+<li>这么说，会给很多新手带来困扰。因为如果我的计算机内存条是2G，两个进程就是8G，这明显不科学。所以说这4G的内存是假的，并不是真正在内存条上划分了4G，而是空头支票</li>
+<li>4G内存分给某一个进程，进程可以在这4G里面随便用，但是只有你真正操作内存的时候，才会把你用的内存映射到物理内存上面</li>
+<li>而物理内存和真正的内存条之间还有一层映射<img src="/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529124800750.png" alt="image-20200529124800750" style="zoom:50%;" / loading="lazy"></li>
+<li>至于如何通过线性地址找到物理地址，需要在中级班讲</li>
+</ul>
+<h3 id="内存地址"><a href="#内存地址" class="headerlink" title="内存地址"></a>内存地址</h3><ul>
+<li>内存太大没法起名字，所以只能使用编号。这个编号又称为<strong>内存地址</strong>。</li>
+<li>因为你的地址宽度有32位，所以能够寻找的内存一共有2的32次方块，也就是4G</li>
+</ul>
+<h3 id="如何使用内存"><a href="#如何使用内存" class="headerlink" title="如何使用内存"></a>如何使用内存</h3><ul>
+<li>每个程序都有自己的4G的内存空间，不能写到其他的内存空间里面去。那怎么知道能往哪写？一个技巧就是看右下方的堆栈区<img src="/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529130059204.png" alt="image-20200529130059204" style="zoom:50%;" / loading="lazy"></li>
+<li>举例</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">#把立即数写到内存里 
+mov byte prt ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">0045F</span>CF8<span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token number">1</span>
+mov dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">045F</span>CFC<span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token number">2</span>
+
+#把寄存器里的值写到内存里
+#把eax寄存器里的值写到内存中，需要注意的是宽度必须一样
+mov dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">045F</span>D00<span class="token punctuation">]</span><span class="token punctuation">,</span>EAX
+
+#把内存中的值取出来放到EAX寄存器
+mov EAX<span class="token punctuation">,</span>dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">045F</span>D04<span class="token punctuation">]</span></code></pre>
+
+<ul>
+<li>在汇编中，绝大部分指令是不允许直接从内存读出来放到内存里的，而是要经过寄存器</li>
+</ul>
+<h2 id="内存地址的5种形式"><a href="#内存地址的5种形式" class="headerlink" title="内存地址的5种形式"></a>内存地址的5种形式</h2><h3 id="形式一：-立即数"><a href="#形式一：-立即数" class="headerlink" title="形式一：[立即数]"></a>形式一：[立即数]</h3><pre class="language-c" data-language="c"><code class="language-c">mov eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">045F</span>CF8<span class="token punctuation">]</span><span class="token comment">//045FCF8 就是立即数形式</span></code></pre>
+
+<h3 id="形式二：-reg"><a href="#形式二：-reg" class="headerlink" title="形式二：[reg]"></a>形式二：[reg]</h3><pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//reg代表寄存器 可以是8个通用寄存器中的任意一个</span>
+
+<span class="token comment">//读取内存中的值</span>
+mov ecx<span class="token punctuation">,</span> <span class="token number">0x13FFD0</span>
+mov eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ecx<span class="token punctuation">]</span>
+
+<span class="token comment">//向内存中写入数据</span>
+mov edx<span class="token punctuation">,</span> <span class="token number">0x13ffd8</span>
+mov dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>edx<span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token number">0x87654321</span></code></pre>
+
+<h3 id="形式三：-reg-立即数"><a href="#形式三：-reg-立即数" class="headerlink" title="形式三：[reg+立即数]"></a>形式三：[reg+立即数]</h3><pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//读内存中值</span>
+mov ecx<span class="token punctuation">,</span><span class="token number">0x13FFD0</span>
+mov eax<span class="token punctuation">,</span>dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ecx<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span>
+
+<span class="token comment">//往内存中写</span>
+mov edx<span class="token punctuation">,</span><span class="token number">0x13FFD0</span>
+mov dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>edx<span class="token operator">+</span><span class="token number">0xC</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token number">0x87654321</span></code></pre>
+
+<h3 id="形式四：-reg-reg-1-2-4-8"><a href="#形式四：-reg-reg-1-2-4-8" class="headerlink" title="形式四：[reg+reg*{1,2,4,8}]*"></a>形式四：[reg+reg*{1,2,4,8}]*</h3><pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//读</span>
+mov eax<span class="token punctuation">,</span> <span class="token number">13FF</span>C4
+mov ecx<span class="token punctuation">,</span> <span class="token number">2</span>
+mov edx<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>eax<span class="token operator">+</span>ecx<span class="token operator">*</span><span class="token number">4</span><span class="token punctuation">]</span>
+
+<span class="token comment">//写</span>
+mov eax<span class="token punctuation">,</span> <span class="token number">13FF</span>C4
+mov ecx<span class="token punctuation">,</span> <span class="token number">2</span>
+mov dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>eax<span class="token operator">+</span>ecx<span class="token operator">*</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token number">87654321</span></code></pre>
+
+<h3 id="形式五：-reg-reg-1-2-4-8-立即数"><a href="#形式五：-reg-reg-1-2-4-8-立即数" class="headerlink" title="形式五：[reg+reg*{1,2,4,8}+立即数]"></a>形式五：[reg+reg*{1,2,4,8}+立即数]</h3><pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//读</span>
+mov eax<span class="token punctuation">,</span> <span class="token number">13FF</span>C4
+mov ecx<span class="token punctuation">,</span> <span class="token number">2</span>
+mov edx<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>eax<span class="token operator">+</span>ecx<span class="token operator">*</span><span class="token number">4</span><span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span>
+
+<span class="token comment">//写</span>
+mov eax<span class="token punctuation">,</span> <span class="token number">13FF</span>C4
+mov ecx<span class="token punctuation">,</span> <span class="token number">2</span>
+mov dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>eax<span class="token operator">+</span>ecx<span class="token operator">*</span><span class="token number">4</span><span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token number">87654321</span></code></pre>
+
+<h3 id="数据存储模式"><a href="#数据存储模式" class="headerlink" title="数据存储模式"></a>数据存储模式</h3><ul>
+<li>大端，小端存储</li>
+<li>PC端 80x86 架构都是小端存储。手机端arm架构的绝大多数都是大端存储的</li>
+<li>当然，大小端存储并不是绝对的，编译器可以修改存储模式</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">mov byte  ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">0x00000000</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">0x1A</span>
+mov word  ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">0x00000000</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">0x1A2C</span>
+mov dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">0x00000000</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">0X1A2C3E4D</span></code></pre>
+
+<ul>
+<li><p>DTDebug内存查看窗口的使用</p>
+<ul>
+<li>db：一个字节显示</li>
+</ul>
+<img src="/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529134547431.png" alt="image-20200529134547431" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>dw：两个字节显示</li>
+</ul>
+<img src="/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529134749992.png" alt="image-20200529134749992" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>dd：四个字节显示</li>
+</ul>
+<img src="/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529134926805.png" alt="image-20200529134926805" style="zoom:50%;" / loading="lazy">
+
+</li>
+</ul>
+<h2 id="常用汇编命令"><a href="#常用汇编命令" class="headerlink" title="常用汇编命令"></a>常用汇编命令</h2><ul>
+<li>如果感兴趣还有哪些指令，以及指令怎么用，可以看一下《intel白皮书》第二卷，第三章和第四章</li>
+<li>不建议看intel白皮书之外的指令书籍</li>
+</ul>
+<h3 id="MOV指令-ADD指令-加-SUB指令-减"><a href="#MOV指令-ADD指令-加-SUB指令-减" class="headerlink" title="MOV指令         ADD指令(加)    SUB指令(减)"></a>MOV指令         ADD指令(加)    SUB指令(减)</h3><h3 id="AND指令-与-OR指令-或-XOR指令-异或"><a href="#AND指令-与-OR指令-或-XOR指令-异或" class="headerlink" title="AND指令(与)     OR指令(或)     XOR指令(异或)"></a>AND指令(与)     OR指令(或)     XOR指令(异或)</h3><h3 id="NOT指令-非"><a href="#NOT指令-非" class="headerlink" title="NOT指令(非)"></a>NOT指令(非)</h3><h3 id="内存复制指令"><a href="#内存复制指令" class="headerlink" title="内存复制指令"></a>内存复制指令</h3><h3 id="MOVS指令"><a href="#MOVS指令" class="headerlink" title="MOVS指令"></a>MOVS指令</h3><ul>
+<li>移动数据 内存到内存</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">MOVS BYTE PTR ES<span class="token operator">:</span><span class="token punctuation">[</span>EDI<span class="token punctuation">]</span><span class="token punctuation">,</span> BYTE PTR DS<span class="token operator">:</span><span class="token punctuation">[</span>ESI<span class="token punctuation">]</span> <span class="token comment">//MOVB </span>
+MOVS WORD PTR ES<span class="token operator">:</span><span class="token punctuation">[</span>EDI<span class="token punctuation">]</span><span class="token punctuation">,</span> BYTE PTR DS<span class="token operator">:</span><span class="token punctuation">[</span>ESI<span class="token punctuation">]</span> <span class="token comment">//MOVW </span>
+MOVS DWORD PTR ES<span class="token operator">:</span><span class="token punctuation">[</span>EDI<span class="token punctuation">]</span><span class="token punctuation">,</span> BYTE PTR DS<span class="token operator">:</span><span class="token punctuation">[</span>ESI<span class="token punctuation">]</span> <span class="token comment">//MOVD </span>
+例子：
+mov edi<span class="token punctuation">,</span> <span class="token number">12ff</span>d8 
+mov esi<span class="token punctuation">,</span> <span class="token number">12ff</span>d0 
+movs dword ptr es<span class="token punctuation">[</span>edi<span class="token punctuation">]</span><span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>esi<span class="token punctuation">]</span></code></pre>
+
+<ul>
+<li>通用寄存器，也有自己独特的作用，比如说edi，esi</li>
+</ul>
+<ul>
+<li>在我们的汇编指令里面，当我们要把数据从内存中的一个地方复制到另外一个地方，也就是所谓的<strong>“串”指令</strong>，就是用到EDI,ESI</li>
+<li>ESI：你要复制的数据在哪个地址</li>
+<li>EDI：你要把数据复制到哪个地址</li>
+<li>MOVS指令复制完之后，ESI和EDI会自加。比如，复制完一字节之后ESI和EDI都会自加1，所以用来复制是非常好使的</li>
+</ul>
+<h3 id="标志寄存器EFL"><a href="#标志寄存器EFL" class="headerlink" title="标志寄存器EFL"></a>标志寄存器EFL</h3><p>标志寄存器有32位，里面的每一位代表的含义都是不一样的</p>
+<pre class="language-c" data-language="c"><code class="language-c">EFL<span class="token operator">:</span> <span class="token number">000000246</span>
+
+<span class="token comment">//拆</span>
+<span class="token number">0000</span> <span class="token number">0000</span> <span class="token number">0000</span> <span class="token number">0000</span> <span class="token number">0000</span> <span class="token number">0010</span> <span class="token number">0100</span> <span class="token number">0110</span></code></pre>
+
+<ul>
+<li>第10位是DF位，方向位<ul>
+<li>DF位为0，MOVS指令用完之后，ESI，EDI地址都会加1，加2等等</li>
+<li>DF位为1，MOVS指令用完以后，ESI，EDI地址都会减1，减2等等</li>
+</ul>
+</li>
+<li>因为用到了DF位，所以讲一下，剩下的以后再讲</li>
+</ul>
+<h3 id="STOS指令"><a href="#STOS指令" class="headerlink" title="STOS指令"></a>STOS指令</h3><ul>
+<li>将AL, AX, EAX的值存储到[EDI]指定的内存单元</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">STOS BYTE PTR ES<span class="token operator">:</span><span class="token punctuation">[</span>EDI<span class="token punctuation">]</span> <span class="token comment">//STOSB </span>
+STOS WORD PTR ES<span class="token operator">:</span><span class="token punctuation">[</span>EDI<span class="token punctuation">]</span> <span class="token comment">//STOSW </span>
+STOS DWORD PTR ES<span class="token operator">:</span><span class="token punctuation">[</span>EDI<span class="token punctuation">]</span> <span class="token comment">//STOSD </span>
+
+MOV EAX<span class="token punctuation">,</span> <span class="token number">12345678</span> 
+MOV EDI<span class="token punctuation">,</span> <span class="token number">12FF</span>C4 
+STOS BYTE PTR ES<span class="token operator">:</span><span class="token punctuation">[</span>EDI<span class="token punctuation">]</span> 
+STOS WORD PTR ES<span class="token operator">:</span><span class="token punctuation">[</span>EDI<span class="token punctuation">]</span> 
+STOS DWORD PTR ES<span class="token operator">:</span><span class="token punctuation">[</span>EDI<span class="token punctuation">]</span> 
+
+观察edi的值 修改标志寄存器D位的值，然后执行下面指令： 
+MOV EAX<span class="token punctuation">,</span> <span class="token number">12345678</span> 
+MOV EDI<span class="token punctuation">,</span> <span class="token number">12FF</span>C4</code></pre>
+
+<h3 id="REP指令"><a href="#REP指令" class="headerlink" title="REP指令"></a>REP指令</h3><ul>
+<li>按计数寄存器(ECX)中指定的次数重复执行字符串指令</li>
+<li>我们在复制的时候，可能会遇到，一次复制一片而不是一个字节。这个时候，我们就可以用到汇编里面重复执行的指令</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">MOV ECX<span class="token punctuation">,</span><span class="token number">10</span> <span class="token comment">//这里的10是16进制的10，重复16次</span>
+REP MOVSD
+
+REP STOSD</code></pre>
+
+<ul>
+<li>ECX很多时候当做<strong>计数器</strong></li>
+<li>EAX很多时候当做<strong>返回值</strong></li>
+<li>ESP,EBP通常用作<strong>堆栈</strong></li>
+<li>ESI,EDI通常用作串复制的源地址和<strong>目的地址</strong></li>
+</ul>
+<h2 id="堆栈相关的指令"><a href="#堆栈相关的指令" class="headerlink" title="堆栈相关的指令"></a>堆栈相关的指令</h2><h3 id="什么是堆栈"><a href="#什么是堆栈" class="headerlink" title="什么是堆栈"></a>什么是堆栈</h3><ul>
+<li><p>每一个进程名义上都有4G的内存空间，那是不是说这4G的空间，应用程序就可以随便使用？并不是这样，只有在真正用某一块内存的时候，一定要向操作系统申请，换句话说，你一定要告诉操作系统，我们管这个过程称作<strong>内存的申请</strong></p>
+</li>
+<li><p><strong>堆栈就是一块内存</strong>，只不过不是程序员申请的，而是在程序启动执行的时候，操作系统就已经替我们分配好的这么一块内存。所以，这是堆栈和其他内存不同的地方</p>
+</li>
+<li><p>堆栈这块内存，主要是给程序执行的时候用的，比如说一些临时数据</p>
+</li>
+<li><p>这里说的堆栈和数据结构中的堆栈没有任何关系。堆栈是程序执行过程中要使用的一块内存，这意味着什么？这就意味着任何程序在运行中的关键数据，在堆栈中一定都会有体现。我们可以把堆栈看成程序的心脏，所有重要的数据在这里面都有体现。无论是做病毒的，外挂的，堆栈一定是重中之重</p>
+</li>
+<li><p>操作系统给我们分配了多大的一块内存呢？</p>
+</li>
+</ul>
+<img src="/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529161737635.png" alt="image-20200529161737635" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li><p>从DTDbug就可以看到分配的堆栈的大小.这块内存在使用的时候是从大的地址开始用，用超了就会报错</p>
+</li>
+<li><p>当我们程序运行到某一步，想看堆栈用到哪了，怎么看？</p>
+<ul>
+<li>看ESP寄存器的值</li>
+</ul>
+</li>
+<li><p>使用堆栈一定要遵守一定的规则，那就是使用的时候一定要记录堆栈用到哪了，这样下面的程序用的时候就不会覆盖之前使用过的堆栈了</p>
+</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//使用堆栈</span>
+mov dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">0038F</span><span class="token number">9</span>A0<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">1</span>
+mov dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">0038F</span><span class="token number">99</span>C<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">2</span>
+
+<span class="token comment">//堆栈提升，为的是避免接下来使用堆栈的时候把上面的值修改掉</span>
+sub esp<span class="token punctuation">,</span> <span class="token number">8</span>
+
+<span class="token comment">//堆栈使用完恢复堆栈</span>
+add esp<span class="token punctuation">,</span> <span class="token number">8</span></code></pre>
+
+<ul>
+<li><p><strong>为什么说局部变量一定要赋初值</strong>？</p>
+<ul>
+<li>因为如果不赋初值的话，很可能就把原来随便一个值就给你了，是之前剩下的垃圾，初始化的值未必是0</li>
+</ul>
+</li>
+</ul>
+<h3 id="PUSH指令"><a href="#PUSH指令" class="headerlink" title="PUSH指令"></a>PUSH指令</h3><pre class="language-c" data-language="c"><code class="language-c">PUSH <span class="token number">3</span>
+PUSH EAX</code></pre>
+
+<ul>
+<li><p>一个push指令相当于我们上面的mov之后再提升堆栈，即mov + sub</p>
+</li>
+<li><p>接下来看一种情况</p>
+</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">PUSH <span class="token number">1</span>
+PUSH <span class="token number">2</span>
+PUSH <span class="token number">3</span>
+ADD ESP<span class="token punctuation">,</span> <span class="token number">0</span>C</code></pre>
+
+<ul>
+<li>当执行完上面的指令，需要将1，2，3存到别的地方，比如说ECX寄存器。现在就很麻烦，因为ECX原来可能就有数据，这种情况该怎么处理？</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">PUSH ECX</code></pre>
+
+<ul>
+<li>当把ECX压栈之后，ECX使用完之后，再把ECX还原回去，这个时候可以怎么办？</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//假设ECX存到了18ff78这个位置,下面两种写法等价</span>
+MOV ECX<span class="token punctuation">,</span> DWORD PTR DS<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">18FF</span><span class="token number">78</span><span class="token punctuation">]</span> 
+MOV ECX<span class="token punctuation">,</span> DWORD PTR DS<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token punctuation">]</span>
+
+<span class="token comment">//堆栈恢复</span>
+ADD ESP<span class="token punctuation">,</span> <span class="token number">4</span></code></pre>
+
+<ul>
+<li>上面这种操作，可以用一条指令来执行<strong>POP</strong></li>
+</ul>
+<h3 id="POP指令"><a href="#POP指令" class="headerlink" title="POP指令"></a>POP指令</h3><ul>
+<li>pop指令相当于 mov + add</li>
+</ul>
+<h2 id="修改EIP指令"><a href="#修改EIP指令" class="headerlink" title="修改EIP指令"></a>修改EIP指令</h2><ul>
+<li>在学习的时候先不要想一些花哨的招式，所有的技术，招数在强大的基础面前都是一文不值的</li>
+<li>EIP寄存器里面存放的就是CPU下次执行的指令地址</li>
+<li>Intel并没有直接提供修改EIP的指令，但是提供了其他指令</li>
+</ul>
+<h3 id="JMP指令"><a href="#JMP指令" class="headerlink" title="JMP指令"></a>JMP指令</h3><pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//mov eip, 4183F4，修改eip里的值为4183F4</span>
+<span class="token comment">//jmp后面加立即数</span>
+jmp <span class="token number">4183F</span><span class="token number">4</span>
+
+MOV EAX<span class="token punctuation">,</span> <span class="token number">4183F</span>A
+<span class="token comment">//jmp后面加寄存器</span>
+JMP EAX
+
+<span class="token comment">//efi有32位，所以数据宽度只能是dword</span>
+jmp dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">4183E1</span><span class="token punctuation">]</span></code></pre>
+
+<h3 id="CALL指令"><a href="#CALL指令" class="headerlink" title="CALL指令"></a>CALL指令</h3><pre class="language-c" data-language="c"><code class="language-c"><span class="token number">004183</span>DC     call <span class="token number">4183F</span>A</code></pre>
+
+<ul>
+<li><p>当执行CALL指令，为了让代码一行一行执行，要按F7，这个先记住，以后讲调试的时候再学</p>
+</li>
+<li><p>CALL指令会对堆栈产生影响</p>
+<ul>
+<li>把4183FA写到EFI</li>
+</ul>
+<ul>
+<li>把原来指令的下一条指令地址( 004183E0)放入堆栈中</li>
+<li>把ESP减4</li>
+</ul>
+</li>
+<li><p>既然我们知道CALL指令做的事情，那我们也可以用其他的指令实现相同的功能，这样我们就能达到加密的目的</p>
+</li>
+</ul>
+<h3 id="RET指令"><a href="#RET指令" class="headerlink" title="RET指令"></a>RET指令</h3><ul>
+<li>把堆栈里的值放入到EIP</li>
+<li>ESP值加4</li>
+</ul>
+<h2 id="拓展：反调试之Fake-F8"><a href="#拓展：反调试之Fake-F8" class="headerlink" title="拓展：反调试之Fake F8"></a>拓展：反调试之Fake F8</h2><ul>
+<li><p>这节课主要看一下汇编的一个用处，汇编到底会用在什么地方</p>
+</li>
+<li><p>其实汇编是我们学习编程的基础，能解决的问题很多，反调试只是其中之一</p>
+</li>
+<li><p>F7 单步步入            F8  单步步过</p>
+</li>
+<li><p>调试器实现原理;</p>
+<ul>
+<li><p>断点：0xCC</p>
+</li>
+<li><p>CPU见到int 3指令就会停下里，停到调试器里，至于为什么停下来，后面中级班会在软件调试里面会详细地讲解</p>
+</li>
+</ul>
+<ul>
+<li>单步步入：设置EFLAGS的TF位为1</li>
+<li>单步步过：在指令下一行</li>
+</ul>
+</li>
+<li><p>F7和F8在普通指令前，是没有区别的，唯一有区别的就是CALL指令。当我们用F7执行的时候，会进入到CALL里面执行。但F8不是，你的CALL指令可能有很多很多行，但是<strong>F8会把这条指令当成一条指令来看待，他会在CALL指令的下一行直接加CC</strong></p>
+</li>
+<li><p>现在我们就修改F8，这样的话，别人使用F8跟踪你的代码，当F8失效，就达到了反调试的目的</p>
+</li>
+<li><p>这里我们用到的就是call指令和堆栈的知识</p>
+</li>
+</ul>
+<img src="/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200529214616811.png" alt="image-20200529214616811" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>上面这种情况，如果使用F8，就会失效，因为我已经把堆栈里的下一条指令的地址改掉了</li>
+<li>这种情况使用F7仍然能够下断点，仍然能跟。那这种情况怎么办？我们可以写大量的没有意义的调用，而且写多层，可能你跟进去有一万行代码，都是没有意义的，就是为了消耗你的耐心</li>
+</ul>
+<h2 id="汇编眼中的函数"><a href="#汇编眼中的函数" class="headerlink" title="汇编眼中的函数"></a>汇编眼中的函数</h2><h3 id="什么是函数"><a href="#什么是函数" class="headerlink" title="什么是函数"></a>什么是函数</h3><ul>
+<li><strong>函数是一系列指令的集合，为了完成某个会重复使用的特定功能</strong>。比如，像寄存器中赋值，下面这3行就可以看成一个函数，功能是往寄存器里面赋值</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">mov eax<span class="token punctuation">,</span> <span class="token number">01</span>
+mov edx<span class="token punctuation">,</span> <span class="token number">02</span>
+mov ecx<span class="token punctuation">,</span> <span class="token number">03</span></code></pre>
+
+<h3 id="函数的调用"><a href="#函数的调用" class="headerlink" title="函数的调用"></a>函数的调用</h3><ul>
+<li>通常我们函数调用的时候不用jmp指令，而是用call指令，函数用完，用一个ret指令就很容易沿着原来的路线往下执行</li>
+</ul>
+<h3 id="参数和返回值"><a href="#参数和返回值" class="headerlink" title="参数和返回值"></a>参数和返回值</h3><ul>
+<li>编写一个函数，能够得到任意的2个整数的值</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//传递参数，这里用寄存器传递的参数，当然也可以用其他的方式传递参数</span>
+mov ecx<span class="token punctuation">,</span> <span class="token number">1</span>
+mov edx<span class="token punctuation">,</span> <span class="token number">2</span>
+
+call <span class="token number">004183</span>D7 <span class="token comment">//调用函数 </span>
+
+add ecx<span class="token punctuation">,</span> edx  <span class="token comment">//指令内存地址：004183D7</span>
+mov eax<span class="token punctuation">,</span> ecx  <span class="token comment">//通常我们把返回值放到EAX里面</span>
+ret</code></pre>
+
+<h3 id="堆栈传参"><a href="#堆栈传参" class="headerlink" title="堆栈传参"></a>堆栈传参</h3><ul>
+<li><p>上面的参数是通过通用寄存器传递的，如果参数很多，比如说有10个参数，该怎么办？</p>
+<ul>
+<li>堆栈传参</li>
+</ul>
+</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//实现5个数相加功能 </span>
+push <span class="token number">1</span> 
+push <span class="token number">2</span> 
+push <span class="token number">3</span> 
+push <span class="token number">4</span> 
+push <span class="token number">5</span> 
+
+call <span class="token number">004183</span>D7 <span class="token comment">//函数内存地址：004183D7 </span>
+
+mov eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">14</span><span class="token punctuation">]</span> 
+add eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">10</span><span class="token punctuation">]</span> 
+add eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span>C<span class="token punctuation">]</span> 
+add eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span> 
+add eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span> 
+ret</code></pre>
+
+<h2 id="堆栈平衡"><a href="#堆栈平衡" class="headerlink" title="堆栈平衡"></a>堆栈平衡</h2><h3 id="什么是堆栈平衡"><a href="#什么是堆栈平衡" class="headerlink" title="什么是堆栈平衡"></a>什么是堆栈平衡</h3><ul>
+<li>当我们返回父程序，则当我们在堆栈中进行堆栈的操作的时候，一定要保证在RET指令之前，ESP指向的是我们压入栈中的地址</li>
+<li>如果通过堆栈传参，那么在函数执行完毕后，要平衡参数导致的堆栈变化</li>
+<li>我们平时可能用到使用堆栈传参的情况</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">push <span class="token number">1</span>
+push <span class="token number">2</span> 
+
+call <span class="token number">004183</span>D7 
+
+mov eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span>
+add eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span>
+ret</code></pre>
+
+<ul>
+<li>上面这种情况，push完成之后ESP的值改变了，在函数执行完之后，ESP的值并没有恢复成push之前的状态，就破坏了堆栈平衡。所以在函数执行完之后，要平衡堆栈</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">push <span class="token number">1</span>
+push <span class="token number">2</span> 
+call <span class="token number">004183</span>D7
+add esp<span class="token punctuation">,</span> <span class="token number">8</span> <span class="token comment">//平衡参数写在了函数的外边，我们称为外平栈</span>
+
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+mov eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span>
+add eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span>
+ret</code></pre>
+
+<pre class="language-c" data-language="c"><code class="language-c">push <span class="token number">1</span>
+push <span class="token number">2</span> 
+call <span class="token number">004183</span>D7
+
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+mov eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span>
+add eax<span class="token punctuation">,</span> dword ptr ds<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span>
+ret <span class="token number">8</span> <span class="token comment">//ret后面加一个字节数恢复堆栈，在函数里面就平衡了参数导致的对占不平衡，我们就把这种情况称作内平栈</span></code></pre>
+
+<h2 id="拓展：外挂是什么"><a href="#拓展：外挂是什么" class="headerlink" title="拓展：外挂是什么"></a>拓展：外挂是什么</h2><ul>
+<li><p>从技术原理的层面讲一下，外挂是怎么实现的</p>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio></span> </span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;windows.h></span> </span>
+
+<span class="token keyword">void</span> <span class="token function">Attack</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+<span class="token punctuation">&#123;</span> 
+	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"*********攻击*********\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+	<span class="token keyword">return</span><span class="token punctuation">;</span> 
+<span class="token punctuation">&#125;</span> 
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span> arg<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> 
+<span class="token punctuation">&#123;</span> 
+	<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"准备，按回车键开始攻击 \n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+	<span class="token function">getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  
+	<span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> 
+	<span class="token punctuation">&#123;</span> 
+		<span class="token function">Attack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+		<span class="token function">Sleep</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+  <span class="token punctuation">&#125;</span> 
+  
+  <span class="token function">getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span> 
+<span class="token punctuation">&#125;</span></code></pre>
+</li>
+<li><p>通过dtdbug查看上面的反汇编代码，找到Sleep(3000)，修改3000这个值</p>
+</li>
+<li><p>如果你会写C代码，就可以写C代码，跨进程该内存，来修改3000这个值。现在不会，先借助CE工具来修改</p>
+</li>
+</ul>
+<h2 id="ESP寻址"><a href="#ESP寻址" class="headerlink" title="ESP寻址"></a>ESP寻址</h2><ul>
+<li><p>回顾：</p>
+<ul>
+<li>函数，参数，参数传递，堆栈平衡</li>
+</ul>
+</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">push <span class="token number">1</span>
+push <span class="token number">2</span> 
+call <span class="token number">004183</span>D7
+
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token comment">//你写的地址里有EBP和ESP，这个地方就可以写ss</span>
+mov eax<span class="token punctuation">,</span> dword ptr ss<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span> 
+add eax<span class="token punctuation">,</span> dword ptr ss<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">]</span>
+ret <span class="token number">8</span> </code></pre>
+
+<ul>
+<li>上面这就是所谓的ESP寻址</li>
+<li>优点是非常灵活，缺点是写的代码复杂的时候就可能有问题了，比如下面这种情况</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">push <span class="token number">1</span> 
+push <span class="token number">2</span> 
+
+call <span class="token number">004183</span>D7 <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token comment">//后面要用到这3个寄存器，先把原来的值保留先来防止后面修改后改不回来 </span>
+
+push ecx 
+push edx 
+push ebx 
+mov ecx<span class="token punctuation">,</span> dword ptr ss<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">10</span><span class="token punctuation">]</span> 
+add ecx<span class="token punctuation">,</span> dword ptr ss<span class="token operator">:</span><span class="token punctuation">[</span>ESP<span class="token operator">+</span><span class="token number">14</span><span class="token punctuation">]</span> 
+mov eax<span class="token punctuation">,</span> ecx 
+
+pop ebx 
+pop edx 
+pop ecx 
+
+ret <span class="token number">8</span></code></pre>
+
+<h2 id="EBP寻址"><a href="#EBP寻址" class="headerlink" title="EBP寻址"></a>EBP寻址</h2><ul>
+<li>ESP存的是栈顶指针，EBP通常存的是栈底指针</li>
+<li>使用EBP的好处是它的位置相对固定</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">push <span class="token number">1</span>
+push <span class="token number">2</span> 
+call <span class="token number">004183</span>D7
+add esp<span class="token punctuation">,</span> <span class="token number">8</span> <span class="token comment">//外平栈</span>
+
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+push ebp
+mov ebp<span class="token punctuation">,</span> esp
+sub esp<span class="token punctuation">,</span> <span class="token number">10</span> <span class="token comment">//根据需要提升堆栈</span>
+mov eax<span class="token punctuation">,</span> dword ptr ss<span class="token operator">:</span><span class="token punctuation">[</span>ebp<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span>
+add eax<span class="token punctuation">,</span> dword ptr ss<span class="token operator">:</span><span class="token punctuation">[</span>ebp<span class="token operator">+</span>c<span class="token punctuation">]</span>
+mov esp<span class="token punctuation">,</span> ebp <span class="token comment">//恢复堆栈</span>
+pop ebp
+ret</code></pre>
+
+<ul>
+<li>使用EBP寻址，当使用堆栈的时候提升堆栈，使用完就恢复堆栈</li>
+<li>如果想从事底层，从事安全相关的，堆栈就是一个制高点，对堆栈理解的程度越深，对程序执行理解的就越深</li>
+</ul>
+<h2 id="JCC指令"><a href="#JCC指令" class="headerlink" title="JCC指令"></a>JCC指令</h2><ul>
+<li>今天讲的JCC指令都是能改EIP寄存器的</li>
+<li>JCC指令修改EIP不像JMP直接修改，而是要看EFL寄存器中标志位的一些值</li>
+<li>想要学好JCC，就要理解标志寄存器，标志寄存器弄清楚了，JCC也就弄清楚了</li>
+</ul>
+<h3 id="EFLAGS寄存器"><a href="#EFLAGS寄存器" class="headerlink" title="EFLAGS寄存器"></a>EFLAGS寄存器</h3><img src="/images/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/image-20200530101117138.png" alt="image-20200530101117138" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>中断和单步在中期用到，其他的是基础阶段用到的</li>
+</ul>
+<h3 id="CF位"><a href="#CF位" class="headerlink" title="CF位"></a>CF位</h3><ul>
+<li><p>通常用于计算的指令都会影响到标志寄存器</p>
+</li>
+<li><p>进位或借位置1</p>
+<pre class="line-numbers language-c">`mov al<span class="token punctuation">,</span> oxFE
+add al<span class="token punctuation">,</span> <span class="token number">02</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span>`</pre>
+
+
+</li>
+</ul>
+<h3 id="PF位"><a href="#PF位" class="headerlink" title="PF位"></a>PF位</h3><ul>
+<li>奇偶校验位</li>
+<li>最低有效字节包含偶数个1置1，否则清零</li>
+</ul>
+<h3 id="AF位"><a href="#AF位" class="headerlink" title="AF位"></a>AF位</h3><ul>
+<li><p>白皮书资料：</p>
+<ul>
+<li>算数操作在结束的第3位发生进位或借位将该标志置1，否则清零</li>
+</ul>
+<ul>
+<li>很少用到，在BCD运算中用到</li>
+</ul>
+</li>
+</ul>
+<h3 id="ZF位"><a href="#ZF位" class="headerlink" title="ZF位"></a>ZF位</h3><ul>
+<li>以后工作中会经常用到</li>
+<li>若结果为0将其置1，反之清零</li>
+<li>经常与CMP或者TEST等指令一起使用</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token comment">//判断两个值是否相等</span>
+<span class="token comment">//cpm指令相当于sub指令，但是相减结果不保存到第一个操作数中</span>
+mov eax<span class="token punctuation">,</span> <span class="token number">100</span>
+moc ecx<span class="token punctuation">,</span> <span class="token number">100</span>
+cmp eax<span class="token punctuation">,</span> ecx 
+
+<span class="token comment">//判断某个值是否为0</span>
+<span class="token comment">//test指令相当于and指令，但是指令结果并不保存到第一个操作数中</span>
+test eax<span class="token punctuation">,</span> eax</code></pre>
+
+<h3 id="SF位"><a href="#SF位" class="headerlink" title="SF位"></a>SF位</h3><ul>
+<li>有符号整型的最高有效位</li>
+<li>0指示结果为正，反之为负</li>
+</ul>
+<h3 id="OF位"><a href="#OF位" class="headerlink" title="OF位"></a>OF位</h3><ul>
+<li><p>用于反映有符号数加减运算所得结果是否溢出</p>
+<ul>
+<li>如果是无符号数运算，是否溢出看CF位</li>
+</ul>
+<ul>
+<li>如果是有符号数运算，是否溢出看OF位</li>
+</ul>
+</li>
+</ul>
+<pre class="language-c" data-language="c"><code class="language-c">mov al<span class="token punctuation">,</span> <span class="token number">0x7F</span>
+add al<span class="token punctuation">,</span> <span class="token number">2</span></code></pre>
+
+<h3 id="DF位"><a href="#DF位" class="headerlink" title="DF位"></a>DF位</h3><ul>
+<li>方向标志控制串指令(MOVS, CMPS, SCAS, LODS, STOS)</li>
+<li>设置DF位是的串指令自动递减(从高地址向低地址处理字符串)，清除使得串指令自动递增</li>
+<li>STD以及CLD指令分别于设置以及清除DF标志</li>
+</ul>
+<h3 id="一句话总结"><a href="#一句话总结" class="headerlink" title="一句话总结"></a>一句话总结</h3><ul>
+<li><strong>所有的jcc指令，根本上就是根据标志寄存器修改EIP</strong></li>
+</ul>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">I'm so cute. Please give me money.</div><div id="qr" style="display:none;"><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/donate/alipay-qrcode.jpg"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/donate/alipay-qrcode.jpg" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-alipay-line"></use></svg></span></div></div><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/donate/qqpay-qrcode.png"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/donate/qqpay-qrcode.png" alt="QQ 支付" title="QQ 支付"></a><div><span style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></span></div></div><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/donate/wechatpay-qrcode.jpg"><img loading="lazy" src="https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/donate/wechatpay-qrcode.jpg" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-pay-line"></use></svg></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>犇</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://benbenit.cn/2020/05/30/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" title="x86汇编语言">https://benbenit.cn/2020/05/30/x86%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2020/05/30/C%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/" rel="prev" title="C语言基础"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">C语言基础</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2020/05/30/C%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8/" rel="next" title="C语言入门"><span class="post-nav-text">C语言入门</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>点击按钮跳转 GitHub Issues 评论。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" target="_blank" rel="noopener" href="https://github.com/YunYouJun/yunyoujun.github.io/issues?q=is:issue+x86汇编语言">GitHub Issues</a></div></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2020 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 犇</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.2.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.0.0</span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script></body></html>
