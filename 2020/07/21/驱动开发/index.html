@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="犇"><meta name="copyright" content="犇"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>驱动开发 | 🐂🐃🐄🦏</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.19/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><link rel="shortcut icon" type="image/svg+xml" href="/favicon.png"><link rel="mask-icon" href="/favicon.png" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="🐂🐃🐄🦏" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"犇犇小站","version":"1.0.0","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true}};
+  </script><meta name="description" content="驱动开发常用的内核内存函数   C语言 内核中    malloc ExAllocatePool   memset RtFillMemory   memcpy RtMoveMemory   free ExFreePool   内核空间与内核模块内核空间 所有进程共享同一份内核空间  内核模块 怎么理解内核模块？在高2G做事情影响的将是所有的进程。驱动本来是为硬件服务的，换句话说，可以把驱动理解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="驱动开发">
+<meta property="og:url" content="https://benbenit.cn/2020/07/21/%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="🐂🐃🐄🦏">
+<meta property="og:description" content="驱动开发常用的内核内存函数   C语言 内核中    malloc ExAllocatePool   memset RtFillMemory   memcpy RtMoveMemory   free ExFreePool   内核空间与内核模块内核空间 所有进程共享同一份内核空间  内核模块 怎么理解内核模块？在高2G做事情影响的将是所有的进程。驱动本来是为硬件服务的，换句话说，可以把驱动理解">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-21T03:42:00.000Z">
+<meta property="article:modified_time" content="2020-08-15T03:38:55.866Z">
+<meta property="article:author" content="犇">
+<meta property="article:tag" content="驱动开发">
+<meta name="twitter:card" content="summary"><script src="/js/ui/mode.js"></script></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="犇"><img width="96" loading="lazy" src="/avatar.gif" alt="犇"></a><div class="site-author-name"><a href="/about/">犇</a></div><a class="site-name" href="/about/site.html">🐂🐃🐄🦏</a><sub class="site-subtitle">文字是有温度的</sub><div class="site-desciption">犇の博客</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">21</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">10</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/benbenit" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:893880071@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91"><span class="toc-number">1.</span> <span class="toc-text">驱动开发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E5%86%85%E6%A0%B8%E5%86%85%E5%AD%98%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.</span> <span class="toc-text">常用的内核内存函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97"><span class="toc-number">1.2.</span> <span class="toc-text">内核空间与内核模块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="toc-number">1.2.1.</span> <span class="toc-text">内核空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97"><span class="toc-number">1.2.2.</span> <span class="toc-text">内核模块</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0%E7%8E%AF%E4%B8%8E3%E7%8E%AF%E7%9A%84%E9%80%9A%E4%BF%A1-%E5%B8%B8%E8%A7%84%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">0环与3环的通信(常规方式)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%A4%87%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.3.1.</span> <span class="toc-text">设备对象</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%AE%BE%E5%A4%87%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">创建设备对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E4%BA%A4%E4%BA%92%E6%95%B0%E6%8D%AE%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">设置交互数据的方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%AC%A6%E5%8F%B7%E9%93%BE%E6%8E%A5"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">创建符号链接</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IRP%E4%B8%8E%E6%B4%BE%E9%81%A3%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.2.</span> <span class="toc-text">IRP与派遣函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IRP%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.3.</span> <span class="toc-text">IRP的类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B4%BE%E9%81%A3%E5%87%BD%E6%95%B0%E5%9C%A8%E5%93%AA%E9%87%8C%E6%B3%A8%E5%86%8C"><span class="toc-number">1.3.4.</span> <span class="toc-text">派遣函数在哪里注册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B4%BE%E9%81%A3%E5%87%BD%E6%95%B0%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.3.5.</span> <span class="toc-text">派遣函数的格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSTD-HOOK"><span class="toc-number">1.4.</span> <span class="toc-text">SSTD_HOOK</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Inline-HOOK"><span class="toc-number">1.5.</span> <span class="toc-text">Inline_HOOK</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E6%A0%B8%E5%90%8C%E6%AD%A5%E4%B9%8B%E4%B8%B4%E7%95%8C%E5%8C%BA"><span class="toc-number">1.6.</span> <span class="toc-text">多核同步之临界区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%94%E7%A4%BA%E4%BB%A3%E7%A0%81"><span class="toc-number">1.6.1.</span> <span class="toc-text">演示代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LOCK%E6%8C%87%E4%BB%A4"><span class="toc-number">1.6.2.</span> <span class="toc-text">LOCK指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%A1%8C%E4%BB%A3%E7%A0%81%E7%9A%84%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="toc-number">1.6.3.</span> <span class="toc-text">多行代码的原子操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E6%A0%B8%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%87%AA%E6%97%8B%E9%94%81"><span class="toc-number">1.7.</span> <span class="toc-text">多核同步之自旋锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.1.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://benbenit.cn/2020/07/21/%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="犇"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="🐂🐃🐄🦏"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">驱动开发</h1><div class="post-meta"><div class="post-time" style="display:block"></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">3.3k</span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">操作系统</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">驱动开发</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><a id="more"></a>
+
+<h1 id="驱动开发"><a href="#驱动开发" class="headerlink" title="驱动开发"></a>驱动开发</h1><h2 id="常用的内核内存函数"><a href="#常用的内核内存函数" class="headerlink" title="常用的内核内存函数"></a>常用的内核内存函数</h2><table>
+<thead>
+<tr>
+<th>C语言</th>
+<th>内核中</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>malloc</td>
+<td>ExAllocatePool</td>
+</tr>
+<tr>
+<td>memset</td>
+<td>RtFillMemory</td>
+</tr>
+<tr>
+<td>memcpy</td>
+<td>RtMoveMemory</td>
+</tr>
+<tr>
+<td>free</td>
+<td>ExFreePool</td>
+</tr>
+</tbody></table>
+<h2 id="内核空间与内核模块"><a href="#内核空间与内核模块" class="headerlink" title="内核空间与内核模块"></a>内核空间与内核模块</h2><h3 id="内核空间"><a href="#内核空间" class="headerlink" title="内核空间"></a>内核空间</h3><ul>
+<li>所有进程共享同一份内核空间</li>
+</ul>
+<h3 id="内核模块"><a href="#内核模块" class="headerlink" title="内核模块"></a>内核模块</h3><ul>
+<li>怎么理解内核模块？在高2G做事情影响的将是所有的进程。驱动本来是为硬件服务的，换句话说，可以把驱动理解成硬件和操作系统之间用于协调的程序，为了能够让操作系统能够操作，使用当前的硬件所编写的程序，我们称为驱动</li>
+<li>但是硬件的种类是非常多的，没有任何一家厂商生产出硬件，对所有操作系统都兼容，这是不现实的，最好的办法就是提供一个专门的接口，大家都遵守相同的接口，那就可以为不同的硬件编写驱动程序了</li>
+<li>在内核高2G并不是一个孤零零的程序，而是由很多模块组成的，比如说现在有3个硬件，可能就对应着3个内核的模块程序，这3个程序为硬件和操作系统之间提供一个连接的功能</li>
+<li>换句话说，可以把高2G看成是很多很多驱动程序组成的，每一个驱动程序，比如说每次自己写的sys程序，把它加载到高2G的时候，都可以看成是一个独立的驱动模块</li>
+<li>只不过我们自己写的驱动并没有真正操作硬件，而是在高2G做了些和安全相关，应用相关的事情。但是他跟能操作硬件的这些驱动地位是一样的，遵守的接口也是完全一样的</li>
+<li>之前学的kernel模块，他的地位和我们写的驱动地位是一样的。他们本身都遵守了PE结构，在内存中地位是一样的</li>
+</ul>
+<h2 id="0环与3环的通信-常规方式"><a href="#0环与3环的通信-常规方式" class="headerlink" title="0环与3环的通信(常规方式)"></a>0环与3环的通信(常规方式)</h2><ul>
+<li>前面已经知道如何编写驱动程序了，假设现在希望驱动程序能够根据3环程序的指令来做相应的动作，这个时候就需要3环的应用程序能够和0环的驱动程序彼此通信。简单点说，就是3环的程序如何把数据传给0环，0环如何把数据返回给3环</li>
+</ul>
+<h3 id="设备对象"><a href="#设备对象" class="headerlink" title="设备对象"></a>设备对象</h3><ul>
+<li>如果想了解通信的这种常规的方式，首先要了解一个新的概念，设备对象</li>
+<li>之前学习应该知道什么是驱动对象了，也就是那个DriverObject，那什么是设备对象？在内核中，当我们想向内核中的程序发送消息的时候，必须先把消息发送给设备对象，驱动对象本身是不能直接接收消息的</li>
+<li>在内核开发时，消息被封装成了另一个结构体IRP(I/O Request Package)</li>
+</ul>
+<h4 id="创建设备对象"><a href="#创建设备对象" class="headerlink" title="创建设备对象"></a>创建设备对象</h4><ul>
+<li>正常情况下，一个设备对象是对应一个硬件的，比如说鼠标键盘。但是设备对象也可以什么都不对应，就像一个抽象的概念</li>
+</ul>
+<h4 id="设置交互数据的方式"><a href="#设置交互数据的方式" class="headerlink" title="设置交互数据的方式"></a>设置交互数据的方式</h4><ul>
+<li>在创建完设备对象之后，就要设置交互数据的方式</li>
+<li>第一种方式，**缓冲区的方式(DO_BUFFERED_IO)**，这种方式怎么去理解？在讲段，页的时候，知道有3环和0环的概念，如果采用这种方式的话，相当于把3环应用程序的一个缓冲区的地址，把里面的数据复制到0环。这种方式的优点就是非常方便，缺点就是在复制的时候性能不是特别好。所以它适合数据量很小的情况</li>
+<li>第二种方式，**直接读写(DO_DIRECT_IO)**，这种方式，对于有段页基础的人来说，非常好理解。这种方式就是就是3环传数据的时候，在0环再映射一份线性地址，两个线性地址指向同一个物理页。这种方式的优点就是适合映射大数据量的数据，但也有缺点，就是如果这两个线性地址映射同一个物理页的时候，要把这个物理页锁住，这个时候，如果内存不够用，想把它里面的数据读到文件中就读不成功，因为被锁住了，也就是说缺点就是浪费物理页</li>
+<li>还有一种，就是其他的方式，也就是从0环直接读写3环的线性地址，这种方式并不推荐，因为不同的进程3环数据可能不一样，如果直接读数据的时候进程切换，3环的数据就不一样了，读的时候就会出错</li>
+</ul>
+<h4 id="创建符号链接"><a href="#创建符号链接" class="headerlink" title="创建符号链接"></a>创建符号链接</h4><ul>
+<li>设置完交互方式之后还不能进行交互，还要创建符号链接，之前给设备对象起了一个名字，决定了他挂到0环树的哪个位置，是给内核用的。如果3环想要找到这个设备，不能通过0环的这个名字找到，这个时候就要给当前的设备起个别名。这个别名的目的就是给3环用</li>
+</ul>
+<h3 id="IRP与派遣函数"><a href="#IRP与派遣函数" class="headerlink" title="IRP与派遣函数"></a>IRP与派遣函数</h3><ul>
+<li>在做图形界面开发的时候，当我们单击鼠标的时候，操作系统会把这次行为封装成一个<strong>MSG</strong>，然后把这个消息传给窗口对象，窗口对象接收到后会根据不同的类型调用不同的<strong>回调函数</strong>，如果是单击，就调用单击回调函数，如果双击，就调用双击回调函数</li>
+<li>在上面已经创建了设备对象，并且设置了符号链接，那么这个时候就可以从3环向设备对象发送消息了。在内核函数里面，给设备对象发送消息和图形界面开发不一样，他<strong>发送消息就是调用不同的函数</strong></li>
+<li>比如说调用CreateFile函数的时候，操作系统就会把这个函数封装成一个结构体，叫做<strong>IRP</strong>，把这个结构体传给设备对象，设备对象接收到这个IRP之后，就会调用不同的<strong>派遣函数</strong>，比如说是create类型的，就调用create类型的派遣函数。如果是read类型的，就调用read类型的派遣函数</li>
+<li>所以之前创建完设备对象，符号链接，接下来要做的就是填写派遣函数了，也就是把派遣函数准备好，准备着当设备对象一旦接收到某个请求的时候，自己来调用派遣函数。这个派遣函数是给设备对象回调用的，不是我们自己调的，我们要做的事情是提供这个派遣函数，把它写好，放到他该放的位置，注册一下告诉设备对象已经把派遣函数写好了，用的时候来这个地方来找就OK了</li>
+</ul>
+<h3 id="IRP的类型"><a href="#IRP的类型" class="headerlink" title="IRP的类型"></a>IRP的类型</h3><ul>
+<li>在图形开发的时候，MSG可能有鼠标单击双击，鼠标滑过等等类型，那IRP有多少种类型？</li>
+<li>当应用层通过CreateFile，ReadFile，WriteFile，CloseHandle等函数打开，从设备读数据，向设备写数据，关闭设备的时候，会使操作系统产生出IRP_MJ_CREATE，IRP_MJ_READ，IRP_MJ_WRITE，IRP_MJ_CLOSE等不同的IRP</li>
+<li>比如说，当应用层调用CreateFile的时候，会产生一个IRP，这个IRP叫做IRP_MJ_CREATE。不要把CreateFile理解成是创建文件，这种理解是错误的，这个函数是创建设备的，比如说在3环想要跟设备进行通信，最起码要创建设备，也就是要把设备打开。当调用CreateFile打开这个设备的时候，这个时候在0环就产生了IRP_MJ_CREATE</li>
+<li>在常规情况下，我们与驱动程序进行交互用的最多的是DeviceControl函数，它产生IRP_MJ_DEVICE_CONTROL这个IRP，因为他更加灵活</li>
+</ul>
+<h3 id="派遣函数在哪里注册"><a href="#派遣函数在哪里注册" class="headerlink" title="派遣函数在哪里注册"></a>派遣函数在哪里注册</h3><ul>
+<li>每个消息都有在预定义的时候设置了编号，在驱动对象Driver_Object里面0x38的位置是一个数组，当调用CreateFile的时候，产生的IRP对应的编号是0x00，那他注册的位置就是驱动对象0x38数组下标为0的位置。也就是说调用的是CreateFile这个函数，它对应的派遣函数就是0</li>
+<li>派遣函数又可以叫做分发函数</li>
+</ul>
+<h3 id="派遣函数的格式"><a href="#派遣函数的格式" class="headerlink" title="派遣函数的格式"></a>派遣函数的格式</h3><ul>
+<li>派遣函数并不是随便写的，也有自己的格式</li>
+</ul>
+<h2 id="SSTD-HOOK"><a href="#SSTD-HOOK" class="headerlink" title="SSTD_HOOK"></a>SSTD_HOOK</h2><ul>
+<li>在之前学过一个专题，就是系统调用。在系统调用里面详细分析了一个3环的应用程序如何找到0环的对应的内核函数，并进行调用</li>
+<li>略</li>
+</ul>
+<h2 id="Inline-HOOK"><a href="#Inline-HOOK" class="headerlink" title="Inline_HOOK"></a>Inline_HOOK</h2><ul>
+<li>略</li>
+</ul>
+<h2 id="多核同步之临界区"><a href="#多核同步之临界区" class="headerlink" title="多核同步之临界区"></a>多核同步之临界区</h2><ul>
+<li>并发指的是多个线程同时执行，单核是分时执行，并不是真正的同时，多核是在某一时刻，会同时有多个线程执行</li>
+<li>同步则是保证在并发执行的环境中各个线程可以<strong>有序</strong>执行</li>
+</ul>
+<h3 id="演示代码"><a href="#演示代码" class="headerlink" title="演示代码"></a>演示代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DWORD dwVal = <span class="number">0</span>; </span><br><span class="line"></span><br><span class="line">线程中代码：</span><br><span class="line">dwVal++; </span><br><span class="line"></span><br><span class="line">对应汇编代码：</span><br><span class="line">mov eax, [<span class="number">0x12345678</span>]</span><br><span class="line">add eax, <span class="number">1</span></span><br><span class="line">mov [<span class="number">0x12345678</span>], eax</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上面如果是两个线程有序执行，正常应该是2.如果第一个线程在执行到add指令的时候发生系统时钟中断，切换到另一个线程执行前两行代码后再次发生线程切换，那么最终结果就变成了1，这就发生了错误，这就不是我们想要的有序执行</li>
+<li>这种问题怎么解决？</li>
+</ul>
+<h3 id="LOCK指令"><a href="#LOCK指令" class="headerlink" title="LOCK指令"></a>LOCK指令</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INC DWORD PTR DS:[<span class="number">0x12345678</span>] </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>前面演示的代码转成汇编后有3行代码，那么一行代码安全吗？如果是单核的情况下，这种解决方案是安全的，因为单核情况下只有这条指令执行完了才会主动或者被动发生线程切换。但是在多核的情况下，这种解决方案行不通，因为可能存在两个CPU同时执行这同一行代码的情况</li>
+<li>这种情况下，就要再想办法，在汇编里面有一个Lock指令，这个指令就可以解决多核的这个问题</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INC DWORD PTR DS:[<span class="number">0x12345678</span>] </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这个Lock指令不是锁CPU的，并不是说一个核执行的时候，把另外的核锁住，而是锁内存的</li>
+<li>因为指令是存在内存中的，那在内存中就有一个地址，CPU在执行这条指令的时候，先要读这条指令，加上lock之后，就能保证多个核在读这条指令的时候，先读的CPU把这个内存锁住，后面的核就没法读出这条指令，那就有一个短暂等待的过程</li>
+</ul>
+<h3 id="多行代码的原子操作"><a href="#多行代码的原子操作" class="headerlink" title="多行代码的原子操作"></a>多行代码的原子操作</h3><ul>
+<li>lock指令只能锁住一行，并不能保证多行代码的原子操作。这个时候可以采用临界区的方式解决这个问题</li>
+<li>临界区的概念就是，一次只允许一个线程进入直到离开。实现临界区的方式就是加锁，这个锁就是一个全局变量，进去加一，出去减一</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DWORD dwFlag = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (dwFlag == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">  dwFlag = <span class="number">1</span>;</span><br><span class="line">  ...</span><br><span class="line">  ...</span><br><span class="line">  ...</span><br><span class="line">  dwFlag = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上面的代码在进入临界区的时候是有问题的</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">DWORD flag = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Lab:</span><br><span class="line">  mov eax, <span class="number">1</span></span><br><span class="line">  lock xadd</span><br><span class="line">  [Flag],eax</span><br><span class="line">  cmp eax, <span class="number">0</span></span><br><span class="line">  jz endLab</span><br><span class="line">  dec [Flag]</span><br><span class="line">  </span><br><span class="line">  jmp Lab;</span><br><span class="line">endLab:</span><br><span class="line">  ret</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">lock dec[Flag]</span><br></pre></td></tr></table></figure>
+
+<h2 id="多核同步之自旋锁"><a href="#多核同步之自旋锁" class="headerlink" title="多核同步之自旋锁"></a>多核同步之自旋锁</h2><ul>
+<li>前面学习了在多核情况下，线程同步是如何处理的。而且自己实现了临界区，通过这种自己实现的临界区，可以实现多核情况下的线程同步</li>
+<li>Windows系统里面有大量的地方需要我们进行线程同步的，微软是如何实现线程同步的？</li>
+<li>它的实现和我们自己写的临界区基本一样，只不过里面不使用的Sleep指令，而是用的pause指令，pause指令是让CPU降温的指令，让他执行的稍微慢一点。这里用pause，如果是单核的话，永远在这降温，永远占着CPU，其他的线程就永远得不到执行，逻辑上就是错的。所以这个指令在多核的情况下才是合理的</li>
+<li>之所以叫自旋锁也是这个原因，如果其他的核占着这个临界区，那当前的核就自己降降温转一会，自己等着。这么做的好处就是避免线程切换，避免替换一堆寄存器</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>自旋锁只有在多核的情况下才有意义。当然单核情况下也有这种代码，只不过用了宏定义，判断单核多核，目的就是为了兼容</li>
+<li>自旋锁与临界区，事件，互斥体一样，都是一种同步机制，都可以让当前线程处于等待状态，区别在于自旋锁不用切换线程，性能更高</li>
+</ul>
+</div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>犇</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://benbenit.cn/2020/07/21/%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" title="驱动开发">https://benbenit.cn/2020/07/21/%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2020/07/21/%E4%BA%8B%E4%BB%B6%E7%AD%89%E5%BE%85/" rel="prev" title="事件等待"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">事件等待</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2020/06/17/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" rel="next" title="系统调用"><span class="post-nav-text">系统调用</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>点击按钮跳转 GitHub Issues 评论。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" target="_blank" rel="noopener" href="https://github.com/benbenit/benbenit.github.io/issues?q=is:issue+驱动开发">GitHub Issues</a></div></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2020 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 犇</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.2.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.0.0</span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><script>const date = new Date();
+const today = (date.getMonth() + 1) + "-" + date.getDate()
+const mourn_days = ["4-4","9-18"]
+if (mourn_days.includes(today)) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><script src="https://cdn.jsdelivr.net/npm/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"https://cdn.jsdelivr.net/npm/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body></html>

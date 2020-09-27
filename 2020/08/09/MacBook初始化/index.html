@@ -1,0 +1,449 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="犇"><meta name="copyright" content="犇"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>MacBook初始化 | 🐂🐃🐄🦏</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.19/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><link rel="shortcut icon" type="image/svg+xml" href="/favicon.png"><link rel="mask-icon" href="/favicon.png" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="🐂🐃🐄🦏" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"犇犇小站","version":"1.0.0","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true}};
+  </script><meta name="description" content="MacBook初始化 之前自己误操作把Docement都删掉了，索性重装系统把用到的记录下来，方便下次rm -rf  开启root用户 系统偏好设置 | 用户与群组 | 登录选项 | 网络账户服务器 - 加入 |  打开目录实用工具 | Active Directory | 菜单栏 - 编辑 | 启用root用户    修改用户名1ben@bendeMacBook Pro ~ % sudo s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MacBook初始化">
+<meta property="og:url" content="https://benbenit.cn/2020/08/09/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/index.html">
+<meta property="og:site_name" content="🐂🐃🐄🦏">
+<meta property="og:description" content="MacBook初始化 之前自己误操作把Docement都删掉了，索性重装系统把用到的记录下来，方便下次rm -rf  开启root用户 系统偏好设置 | 用户与群组 | 登录选项 | 网络账户服务器 - 加入 |  打开目录实用工具 | Active Directory | 菜单栏 - 编辑 | 启用root用户    修改用户名1ben@bendeMacBook Pro ~ % sudo s">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200809005127997.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200808212323470.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811173404085.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811172618053.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811174325305.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811175036949.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811175436946.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200818120409982.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200818120639881.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200813010917067.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200813165150432.png">
+<meta property="og:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200809004431264.png">
+<meta property="article:published_time" content="2020-08-09T01:42:00.000Z">
+<meta property="article:modified_time" content="2020-08-23T12:25:32.711Z">
+<meta property="article:author" content="犇">
+<meta property="article:tag" content="Mac">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://benbenit.cn/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200809005127997.png"><script src="/js/ui/mode.js"></script></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="犇"><img width="96" loading="lazy" src="/avatar.gif" alt="犇"></a><div class="site-author-name"><a href="/about/">犇</a></div><a class="site-name" href="/about/site.html">🐂🐃🐄🦏</a><sub class="site-subtitle">文字是有温度的</sub><div class="site-desciption">犇の博客</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">21</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">10</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/benbenit" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:893880071@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MacBook%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">MacBook初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%90%AFroot%E7%94%A8%E6%88%B7"><span class="toc-number">1.1.</span> <span class="toc-text">开启root用户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%94%A8%E6%88%B7%E5%90%8D"><span class="toc-number">1.2.</span> <span class="toc-text">修改用户名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E4%BB%BB%E4%BD%95%E6%9D%A5%E6%BA%90"><span class="toc-number">1.3.</span> <span class="toc-text">开启任何来源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Homebrew"><span class="toc-number">1.4.</span> <span class="toc-text">安装Homebrew</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%9F%E5%90%8D%E6%98%A0%E5%B0%84"><span class="toc-number">1.4.1.</span> <span class="toc-text">域名映射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Homebrew-1"><span class="toc-number">1.4.2.</span> <span class="toc-text">安装Homebrew</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%ADHomebrew%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0"><span class="toc-number">1.4.3.</span> <span class="toc-text">关闭Homebrew自动更新</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85JDK8"><span class="toc-number">1.5.</span> <span class="toc-text">安装JDK8</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9version"><span class="toc-number">1.5.0.1.</span> <span class="toc-text">修改version</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9sha256"><span class="toc-number">1.5.0.2.</span> <span class="toc-text">修改sha256</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9url"><span class="toc-number">1.5.0.3.</span> <span class="toc-text">修改url</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9pkg%E5%90%8D%E5%AD%97"><span class="toc-number">1.5.0.4.</span> <span class="toc-text">修改pkg名字</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven"><span class="toc-number">1.6.</span> <span class="toc-text">Maven</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scala"><span class="toc-number">1.7.</span> <span class="toc-text">Scala</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.8.</span> <span class="toc-text">安装常用软件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85"><span class="toc-number">1.8.1.</span> <span class="toc-text">脚本安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.9.</span> <span class="toc-text">其他软件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.10.</span> <span class="toc-text">命令行命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#find"><span class="toc-number">1.10.1.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#grep%E5%91%BD%E4%BB%A4"><span class="toc-number">1.10.2.</span> <span class="toc-text">grep命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#file%E5%91%BD%E4%BB%A4"><span class="toc-number">1.10.3.</span> <span class="toc-text">file命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-zshrc"><span class="toc-number">1.11.</span> <span class="toc-text">用户配置文件.zshrc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vim"><span class="toc-number">1.12.</span> <span class="toc-text">Vim</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vim%E5%AE%9E%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.12.1.</span> <span class="toc-text">vim实用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vim%E9%85%8D%E7%BD%AE"><span class="toc-number">1.12.2.</span> <span class="toc-text">vim配置</span></a></li></ol></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://benbenit.cn/2020/08/09/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="犇"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="🐂🐃🐄🦏"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">MacBook初始化</h1><div class="post-meta"><div class="post-time" style="display:block"></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">2.6k</span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/MacBook/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">MacBook</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/Mac/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">Mac</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><a id="more"></a>
+
+<h1 id="MacBook初始化"><a href="#MacBook初始化" class="headerlink" title="MacBook初始化"></a>MacBook初始化</h1><ul>
+<li>之前自己误操作把Docement都删掉了，索性重装系统把用到的记录下来，方便下次<code>rm -rf</code></li>
+</ul>
+<h2 id="开启root用户"><a href="#开启root用户" class="headerlink" title="开启root用户"></a>开启root用户</h2><ul>
+<li><strong>系统偏好设置</strong> | <strong>用户与群组</strong> | <strong>登录选项</strong> | <strong>网络账户服务器 - 加入</strong> |  <strong>打开目录实用工具</strong> | <strong>Active Directory</strong> | <strong>菜单栏 - 编辑</strong> | <strong>启用root用户</strong></li>
+</ul>
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200809005127997.png" alt="image-20200809005127997" style="zoom:50%;" / loading="lazy">
+
+<h2 id="修改用户名"><a href="#修改用户名" class="headerlink" title="修改用户名"></a>修改用户名</h2><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ben@bendeMacBook Pro ~ % sudo scutil --set HostName Ben</span><br></pre></td></tr></table></figure>
+
+<h2 id="开启任何来源"><a href="#开启任何来源" class="headerlink" title="开启任何来源"></a>开启任何来源</h2><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP ~ % sudo spctl --master-disable</span><br></pre></td></tr></table></figure>
+
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200808212323470.png" alt="image-20200808212323470" style="zoom:50%;" / loading="lazy">
+
+<h2 id="安装Homebrew"><a href="#安装Homebrew" class="headerlink" title="安装Homebrew"></a>安装Homebrew</h2><h3 id="域名映射"><a href="#域名映射" class="headerlink" title="域名映射"></a>域名映射</h3><ul>
+<li>因为Git的DNS污染，直接安装homebrew可能装不上，找个<a target="_blank" rel="noopener" href="https://githubusercontent.com.ipaddress.com/raw.githubusercontent.com">域名解析的网站</a>，解析<code>raw.githubusercontent.com</code>和<code>github.com</code>。把解析出来的ip写到<code>/etc/hosts</code>里面</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP ~ % sudo vim /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装Homebrew-1"><a href="#安装Homebrew-1" class="headerlink" title="安装Homebrew"></a>安装Homebrew</h3><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP ~ % ruby -e <span class="string">&quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="关闭Homebrew自动更新"><a href="#关闭Homebrew自动更新" class="headerlink" title="关闭Homebrew自动更新"></a>关闭Homebrew自动更新</h3><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP ~ % echo <span class="string">&#x27;export HOMEBREW_NO_AUTO_UPDATE=true&#x27;</span> &gt;&gt; ~<span class="regexp">/.zshrc</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="安装JDK8"><a href="#安装JDK8" class="headerlink" title="安装JDK8"></a>安装JDK8</h2><ul>
+<li><p>因为自己安装的话不好管理，想使用brew安装</p>
+</li>
+<li><p>参考<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8f53fbdb2180">mac使用brew安装Java8</a>，感谢</p>
+</li>
+<li><p>运行</p>
+</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#刚开始运行报错</span></span><br><span class="line">ben@benのMBP ~ % brew cask install homebrew/cask-versions/java8</span><br></pre></td></tr></table></figure>
+
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811173404085.png" alt="image-20200811173404085" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>新建java8.rb</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP ~ % vim /usr/<span class="keyword">local</span>/Homebrew/Library/Taps/homebrew/homebrew-cask-versions/Casks/java8.rb</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">cask <span class="string">&#x27;java8&#x27;</span> <span class="keyword">do</span> </span><br><span class="line">  version <span class="string">&#x27;8u202,b08:1961070e4c9b4e26a04e7f5a083f551e&#x27;</span>  </span><br><span class="line">  sha256 <span class="string">&#x27;b41367948cf99ca0b8d1571f116b7e3e322dd1ebdfd4d390e959164d75b97c20&#x27;</span> </span><br><span class="line"></span><br><span class="line">  url <span class="string">&quot;https://download.oracle.com/otn-pub/java/jdk/#&#123;version.before_comma&#125;-#&#123;version.after_comma.before_colon&#125;/#&#123;version.after_colon&#125;/jdk-#&#123;version.before_comma&#125;-macosx-x64.dmg&quot;</span>, </span><br><span class="line">      cookies: &#123;    </span><br><span class="line">                 <span class="string">&#x27;oraclelicense&#x27;</span> =&gt; <span class="string">&#x27;accept-securebackup-cookie&#x27;</span>,   </span><br><span class="line">               &#125;    </span><br><span class="line">  name <span class="string">&#x27;Oracle Java 8 Standard Edition Development Kit&#x27;</span> </span><br><span class="line">  homepage <span class="string">&#x27;https://www.oracle.com/technetwork/java/javase/overview/index.html&#x27;</span> </span><br><span class="line"></span><br><span class="line">  depends_on macos: <span class="string">&#x27;&gt;= :yosemite&#x27;</span>  </span><br><span class="line"></span><br><span class="line">  pkg <span class="string">&#x27;JDK 8 Update 202.pkg&#x27;</span>    </span><br><span class="line"></span><br><span class="line">  uninstall pkgutil: <span class="string">&quot;com.oracle.jdk#&#123;version.before_comma&#125;&quot;</span>,   </span><br><span class="line">            delete:  [  </span><br><span class="line">                       <span class="string">&#x27;/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin&#x27;</span>,   </span><br><span class="line">                       <span class="string">&#x27;/Library/PreferencePanes/JavaControlPanel.prefPane&#x27;</span>,    </span><br><span class="line">                     ]  </span><br><span class="line"></span><br><span class="line">  zap trash: [  </span><br><span class="line">               <span class="string">&#x27;~/Library/Application Support/Oracle/Java&#x27;</span>, </span><br><span class="line">               <span class="string">&#x27;~/Library/Application Support/com.oracle.java.JavaAppletPlugin.plist&#x27;</span>,  </span><br><span class="line">               <span class="string">&#x27;~/Library/Application Support/com.oracle.javadeployment.plist&#x27;</span>, </span><br><span class="line">             ]  </span><br><span class="line"></span><br><span class="line">  caveats <span class="keyword">do</span>    </span><br><span class="line">    license <span class="string">&#x27;https://www.oracle.com/technetwork/java/javase/terms/license/javase-license.html&#x27;</span>  </span><br><span class="line">  end   </span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改上面java8.rb的4个参数：version，sha256，url，pkg</li>
+</ul>
+<h4 id="修改version"><a href="#修改version" class="headerlink" title="修改version"></a>修改version</h4><ul>
+<li>下载<a target="_blank" rel="noopener" href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html">JDK8</a>，复制链接地址到剪切板</li>
+</ul>
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811172618053.png" alt="image-20200811172618053" style="zoom:50%;" / loading="lazy">
+
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811174325305.png" alt="image-20200811174325305" style="zoom:50%;" / loading="lazy">
+
+<h4 id="修改sha256"><a href="#修改sha256" class="headerlink" title="修改sha256"></a>修改sha256</h4><ul>
+<li>自己计算sha256加密值，改掉</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP ~ % openssl dgst -sha256 ./Downloads/jdk-<span class="number">8</span>u261-macosx-x64.dmg </span><br><span class="line">SHA256(./Downloads/jdk-<span class="number">8</span>u261-macosx-x64.dmg)= <span class="number">004</span>82257bc26974da9cb7070e01366e99234e1a853445b328a3aa39b53af2492</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改url"><a href="#修改url" class="headerlink" title="修改url"></a>修改url</h4><ul>
+<li>这个url就是下载的dmg路径</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file:<span class="regexp">//</span><span class="regexp">/Users/ben</span><span class="regexp">/Downloads/jdk</span>-<span class="comment">#&#123;version.before_comma&#125;-macosx-x64.dmg</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="修改pkg名字"><a href="#修改pkg名字" class="headerlink" title="修改pkg名字"></a>修改pkg名字</h4><ul>
+<li>双击dmg就可以看到pkg名字</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JDK 8 Update 261.pkg</span><br></pre></td></tr></table></figure>
+
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811175036949.png" alt="image-20200811175036949" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>最终java8.rc</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">cask <span class="string">&#x27;java8&#x27;</span> <span class="keyword">do</span></span><br><span class="line">  version <span class="string">&#x27;8u261,b12/a4634525489241b9a9e1aa73d9e118e6/jdk-8u261-macosx-x64.dmg&#x27;</span></span><br><span class="line">  sha256 <span class="string">&#x27;00482257bc26974da9cb7070e01366e99234e1a853445b328a3aa39b53af2492&#x27;</span></span><br><span class="line"></span><br><span class="line">  url <span class="string">&quot;file:///Users/ben/Downloads/jdk-#&#123;version.before_comma&#125;-macosx-x64.dmg&quot;</span>,</span><br><span class="line">      cookies: &#123;</span><br><span class="line">                 <span class="string">&#x27;oraclelicense&#x27;</span> =&gt; <span class="string">&#x27;accept-securebackup-cookie&#x27;</span>,</span><br><span class="line">               &#125;</span><br><span class="line">  name <span class="string">&#x27;Oracle Java 8 Standard Edition Development Kit&#x27;</span></span><br><span class="line">  homepage <span class="string">&#x27;https://www.oracle.com/technetwork/java/javase/overview/index.html&#x27;</span></span><br><span class="line"></span><br><span class="line">  depends_on macos: <span class="string">&#x27;&gt;= :yosemite&#x27;</span></span><br><span class="line"></span><br><span class="line">  pkg <span class="string">&#x27;JDK 8 Update 261.pkg&#x27;</span></span><br><span class="line"></span><br><span class="line">  uninstall pkgutil: <span class="string">&quot;com.oracle.jdk#&#123;version.before_comma&#125;&quot;</span>,</span><br><span class="line">            delete:  [</span><br><span class="line">                       <span class="string">&#x27;/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin&#x27;</span>,</span><br><span class="line">                       <span class="string">&#x27;/Library/PreferencePanes/JavaControlPanel.prefPane&#x27;</span>,</span><br><span class="line">                     ]</span><br><span class="line"></span><br><span class="line">  zap trash: [</span><br><span class="line">               <span class="string">&#x27;~/Library/Application Support/Oracle/Java&#x27;</span>,</span><br><span class="line">               <span class="string">&#x27;~/Library/Application Support/com.oracle.java.JavaAppletPlugin.plist&#x27;</span>,</span><br><span class="line">               <span class="string">&#x27;~/Library/Application Support/com.oracle.javadeployment.plist&#x27;</span>,</span><br><span class="line">             ]</span><br><span class="line"></span><br><span class="line">  caveats <span class="keyword">do</span></span><br><span class="line">    license <span class="string">&#x27;https://www.oracle.com/technetwork/java/javase/terms/license/javase-license.html&#x27;</span></span><br><span class="line">  end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>再次使用brew安装</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP ~ % brew cask install homebrew/cask-versions/java8</span><br></pre></td></tr></table></figure>
+
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200811175436946.png" alt="image-20200811175436946" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>导致的小问题，就是使用brew升级的时候会报错</li>
+</ul>
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200818120409982.png" alt="image-20200818120409982" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>解决办法</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~$ <span class="keyword">mkdir</span> /usr/<span class="keyword">local</span>/Caskroom/java8/.metadata/<span class="number">8</span>u261,b12/a4634525489241b9a9e1aa73d9e118e6/Casks/       </span><br><span class="line">~$ cp /usr/<span class="keyword">local</span>/Caskroom/java8/.metadata/<span class="number">8</span>u261,b12/a4634525489241b9a9e1aa73d9e118e6/jdk-<span class="number">8</span>u261-macosx-x64.dmg/<span class="number">20200811085536.425</span>/Casks/java8.rb /usr/<span class="keyword">local</span>/Caskroom/java8/.metadata/<span class="number">8</span>u261,b12/a4634525489241b9a9e1aa73d9e118e6/Casks/java8.rb</span><br></pre></td></tr></table></figure>
+
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200818120639881.png" alt="image-20200818120639881" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>这样虽然最后仍然会报错，但是检查到java8.rb文件存在了，就不会导致其他软件也更新不了。而java8本来就没想更新，这个问题也就解决了</li>
+<li>上面这种修改rb文件的方式也适合于安装其他本地dmg，软件升级也同样适用。比如升级百度云(绿色马赛克)失败</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP ~ % brew cask baidunetdisk </span><br></pre></td></tr></table></figure>
+
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200813010917067.png" alt="image-20200813010917067" style="zoom:50%;" / loading="lazy">
+
+<h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://maven.apache.org/download.cgi">官网</a></li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP apps % tar zxf ../Downloads/apache-maven-<span class="number">3.6</span>.<span class="number">3</span>-bin.tar.gz</span><br><span class="line"></span><br><span class="line">ben@benのMBP apps % ln -<span class="keyword">s</span> apache-maven-<span class="number">3.6</span>.<span class="number">3</span> maven</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改本地仓库位置  &amp;  修改中央仓库为阿里云 &amp; 代理</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP apps % vim maven/conf/settings.xml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>/Users/ben/apps/maven/repo<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-aliyun<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nexus aliyun<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">proxy</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>v2ray<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">active</span>&gt;</span>true<span class="tag">&lt;/<span class="name">active</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">protocol</span>&gt;</span>socks5<span class="tag">&lt;/<span class="name">protocol</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">host</span>&gt;</span>127.0.0.1<span class="tag">&lt;/<span class="name">host</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">port</span>&gt;</span>1080<span class="tag">&lt;/<span class="name">port</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">nonProxyHosts</span>&gt;</span>127.0.0.1|local.net|maven.aliyun.com<span class="tag">&lt;/<span class="name">nonProxyHosts</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">proxy</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Scala"><a href="#Scala" class="headerlink" title="Scala"></a>Scala</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.scala-lang.org/">官网</a></li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP apps % tar zxf ../Downloads/scala-<span class="number">2.13</span>.<span class="number">3</span>.tgz</span><br><span class="line"></span><br><span class="line">ben@benのMBP apps % ln -<span class="keyword">s</span> scala-<span class="number">2.13</span>.<span class="number">3</span> scala  </span><br></pre></td></tr></table></figure>
+
+<h2 id="安装常用软件"><a href="#安装常用软件" class="headerlink" title="安装常用软件"></a>安装常用软件</h2><ul>
+<li>持续更新，安装完软件就来记录</li>
+</ul>
+<h3 id="脚本安装"><a href="#脚本安装" class="headerlink" title="脚本安装"></a>脚本安装</h3><ul>
+<li>常用的封装成一个脚本</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ben@benのMBP ~ % vim install.sh</span><br><span class="line">ben@benのMBP ~ % <span class="keyword">chmod</span> +<span class="keyword">x</span> install.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 代理工具</span></span><br><span class="line">brew cask install v2rayu</span><br><span class="line"><span class="comment"># 终端工具</span></span><br><span class="line">brew cask install electerm</span><br><span class="line"><span class="comment"># 解压工具</span></span><br><span class="line">brew cask install keka </span><br><span class="line">brew cask install kekadefaultapp</span><br><span class="line"><span class="comment"># 作图工具</span></span><br><span class="line">brew cask install axure-rp</span><br><span class="line"><span class="comment"># 截图工具</span></span><br><span class="line">brew cask install snipaste</span><br><span class="line"><span class="comment"># 视频下载工具</span></span><br><span class="line">brew cask install downie</span><br><span class="line"><span class="comment"># 鼠标滚轮翻转工具</span></span><br><span class="line">brew cask install scroll-reverser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 虚拟机</span></span><br><span class="line">brew cask install vmware-fusion</span><br><span class="line"></span><br><span class="line"><span class="comment"># Clion</span></span><br><span class="line">brew cask install clion</span><br><span class="line"><span class="comment"># IDEA</span></span><br><span class="line">brew cask install intellij-idea</span><br><span class="line"></span><br><span class="line"><span class="comment"># Typora</span></span><br><span class="line">brew cask install typora</span><br><span class="line"><span class="comment"># Sublime text</span></span><br><span class="line">brew cask install sublime-text</span><br><span class="line"><span class="comment"># WPS</span></span><br><span class="line">brew cask install wpsoffice</span><br><span class="line"></span><br><span class="line"><span class="comment"># QQ</span></span><br><span class="line">brew cask install <span class="keyword">qq</span></span><br><span class="line"><span class="comment"># 微信</span></span><br><span class="line">brew cask install wechat</span><br><span class="line"><span class="comment"># 浏览器</span></span><br><span class="line">brew cask install google-chrome</span><br><span class="line"><span class="comment"># 搜狗输入法</span></span><br><span class="line">brew cask install sogouinput</span><br><span class="line"></span><br><span class="line"><span class="comment"># 迅雷</span></span><br><span class="line">brew cask install thunder</span><br><span class="line"><span class="comment"># 百度网盘</span></span><br><span class="line">brew cask install baidunetdisk</span><br><span class="line"><span class="comment"># 网易云音乐</span></span><br><span class="line">brew cask install neteasemusic</span><br><span class="line"></span><br><span class="line"><span class="comment"># 优酷</span></span><br><span class="line">brew cask install youku</span><br><span class="line"><span class="comment"># 爱奇艺</span></span><br><span class="line">brew cask install qiyimedia</span><br><span class="line"><span class="comment"># 腾讯视频</span></span><br><span class="line">brew cask install qqlive</span><br><span class="line"><span class="comment"># 本地播放器</span></span><br><span class="line">brew cask install iina</span><br><span class="line"></span><br><span class="line"><span class="comment"># nodejs</span></span><br><span class="line">brew install node.js</span><br><span class="line"><span class="comment"># scala</span></span><br><span class="line">brew install scala</span><br><span class="line"><span class="comment"># go</span></span><br><span class="line">brew install go</span><br><span class="line"><span class="comment"># hugo</span></span><br><span class="line">brew install hugo</span><br><span class="line"><span class="comment"># python</span></span><br><span class="line">brew install python</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装git</span></span><br><span class="line">brew install git</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装nodejs</span></span><br><span class="line">brew install node.js</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装tree</span></span><br><span class="line">sudo <span class="keyword">chown</span> -R $(whoami) /usr/<span class="keyword">local</span>/share/man/man8</span><br><span class="line"><span class="keyword">chmod</span> u+w /usr/<span class="keyword">local</span>/share/man/man8</span><br><span class="line">brew install tree</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装wget</span></span><br><span class="line">brew install wget</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h2><ul>
+<li><p>sublime text</p>
+</li>
+<li><p>Mac Fan Control</p>
+</li>
+<li><p>WeChatExtension</p>
+</li>
+</ul>
+<h2 id="命令行命令"><a href="#命令行命令" class="headerlink" title="命令行命令"></a>命令行命令</h2><h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><ul>
+<li>查找符合条件的文件</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-amin</td>
+<td>查找指定时间内被<strong>存取</strong>过的文件或目录，单位分钟</td>
+</tr>
+<tr>
+<td>-cmin</td>
+<td>查找指令时间内被更改过的文件或目录，单位分钟</td>
+</tr>
+<tr>
+<td>-exec</td>
+<td>如果找到这个文件，即find指令的回传值为true，就执行该指令</td>
+</tr>
+<tr>
+<td>-fstype&lt;文件系统类型&gt;</td>
+<td>寻找特定文件系统类型的文件或目录</td>
+</tr>
+<tr>
+<td>-type&lt;文件类型&gt;</td>
+<td>寻找符合指定的文件类型的文件，f普通文件，d目录，l符号链接</td>
+</tr>
+<tr>
+<td>-uid&lt;用户id&gt;</td>
+<td>寻找属于指定用户id的文件</td>
+</tr>
+<tr>
+<td>-user&lt;拥有者名称&gt;</td>
+<td>寻找属于指定用户的文件</td>
+</tr>
+<tr>
+<td>-iname</td>
+<td>查找的时候忽略大小写</td>
+</tr>
+<tr>
+<td>-regex</td>
+<td>基于正则表达式匹配</td>
+</tr>
+<tr>
+<td>-delete</td>
+<td>查找出来，删除，比如find  ./ -name f “*.txt” -delete ,删除当前目录所有txt文件</td>
+</tr>
+<tr>
+<td>-perm</td>
+<td>根据文件所有权进行匹配，find . -type f -name “*.java” ! -perm 777,找出当前文件夹下权限不是777的所有java文件</td>
+</tr>
+</tbody></table>
+<ul>
+<li>借助-exec选项与其他命令结合使用，但是-exec不能执行多行命令，可以把命令封装成sh文件，然后接在-exec上面</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将30天前的.log文件移动到old目录中</span></span><br><span class="line">find . -type f -mtime +<span class="number">30</span> -name <span class="string">&quot;*.log&quot;</span> -<span class="keyword">exec</span> cp &#123;&#125; old \;</span><br></pre></td></tr></table></figure>
+
+<h3 id="grep命令"><a href="#grep命令" class="headerlink" title="grep命令"></a>grep命令</h3><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">grep</span> -rn <span class="string">&quot;字符串&quot;</span> 文件名</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查找文件中符合条件的字符串，通常都加上-r(recursive 递归) 和 -n(number 行号)参数</li>
+</ul>
+<h3 id="file命令"><a href="#file命令" class="headerlink" title="file命令"></a>file命令</h3><ul>
+<li>查看文件类型，比如directory，ASCII，UTF8，jpg，png等</li>
+</ul>
+<h2 id="用户配置文件-zshrc"><a href="#用户配置文件-zshrc" class="headerlink" title="用户配置文件.zshrc"></a>用户配置文件.zshrc</h2><ul>
+<li>安装<code>oh my zsh</code></li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c <span class="string">&quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my zsh/master/tools/install.sh)&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改ys主题，命令行前缀只显示所在目录</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PROMPT=<span class="string">&quot;%&#123;$terminfo[bold]$fg[yellow]%&#125;%~%&#123;$reset_color%&#125;\</span></span><br><span class="line"><span class="string"><span class="subst">$&#123;hg_info&#125;</span>\</span></span><br><span class="line"><span class="string"><span class="subst">$&#123;git_info&#125;</span>\</span></span><br><span class="line"><span class="string">%&#123;$terminfo[bold]$fg[red]%&#125;$ %&#123;$reset_color%&#125;&quot;</span> </span><br></pre></td></tr></table></figure>
+
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200813165150432.png" alt="image-20200813165150432" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>.zshrc(持续更新)</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#zsh的主题</span></span><br><span class="line">ZSH_THEME=<span class="string">&quot;ys&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#命令严格大小写</span></span><br><span class="line">CASE_SENSITIVE=<span class="string">&quot;true&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#跳转多层目录，插件autojump</span></span><br><span class="line">plugins=(autojump)</span><br><span class="line">[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] &amp;&amp; . $(brew --prefix)/etc/profile.d/autojump.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#ll命令</span></span><br><span class="line"><span class="built_in">alias</span> ll=<span class="string">&#x27;ls -hl&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#la命令</span></span><br><span class="line"><span class="built_in">alias</span> la=<span class="string">&#x27;ls -hal&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#命令行走代理</span></span><br><span class="line"><span class="built_in">alias</span> proxy=<span class="string">&#x27;export all_proxy=socks5://127.0.0.1:1080&#x27;</span></span><br><span class="line"><span class="built_in">alias</span> unproxy=<span class="string">&#x27;unset all_proxy&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#使用sublime-text打开文件</span></span><br><span class="line"><span class="built_in">alias</span> subl=<span class="string">&#x27;/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#清理maven的lastUpdated文件</span></span><br><span class="line"><span class="built_in">alias</span> mclean=<span class="string">&#x27;find $MAVEN_HOME/repo -name &quot;*.lastUpdated*&quot; | xargs rm -rf&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭brew自动更新</span></span><br><span class="line"><span class="built_in">export</span> HOMEBREW_NO_AUTO_UPDATE=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#SCALA_HOME</span></span><br><span class="line"><span class="built_in">export</span> SCALA_HOME=/Users/ben/apps/scala</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$SCALA_HOME</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment">#MAVEN_HOME</span></span><br><span class="line"><span class="built_in">export</span> MAVEN_HOME=/Users/ben/apps/maven</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$MAVEN_HOME</span>/bin</span><br></pre></td></tr></table></figure>
+
+<h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><h3 id="vim实用命令"><a href="#vim实用命令" class="headerlink" title="vim实用命令"></a>vim实用命令</h3><ul>
+<li>一般模式</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>w</td>
+<td>跳到下一个单词的头部</td>
+</tr>
+<tr>
+<td>⇧ + w</td>
+<td>跳到下一个单词头部(含标点)</td>
+</tr>
+<tr>
+<td>e</td>
+<td>跳到下个单词的尾部</td>
+</tr>
+<tr>
+<td>⇧ + e</td>
+<td>跳到下个单词的尾部(含标点)</td>
+</tr>
+<tr>
+<td>b</td>
+<td>跳到上个单词头部</td>
+</tr>
+<tr>
+<td>⇧ + b</td>
+<td>跳到上个单词头部(含标点)</td>
+</tr>
+<tr>
+<td>⇧ + h</td>
+<td>跳到窗口第一行</td>
+</tr>
+<tr>
+<td>⇧ + m</td>
+<td>跳到窗口中间行</td>
+</tr>
+<tr>
+<td>⇧ + l</td>
+<td>跳到窗口最后一行</td>
+</tr>
+<tr>
+<td>{</td>
+<td>向下，按块跳</td>
+</tr>
+<tr>
+<td>}</td>
+<td>向上，按块跳</td>
+</tr>
+<tr>
+<td>] + m</td>
+<td>跳到下一个大括号的 {</td>
+</tr>
+<tr>
+<td>[ + m</td>
+<td>跳到上一个大括号的 {</td>
+</tr>
+</tbody></table>
+<ul>
+<li>编辑模式</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i</td>
+<td>光标所在字符进入插入模式</td>
+</tr>
+<tr>
+<td>⇧ + i</td>
+<td>跳到行首进入插入模式</td>
+</tr>
+<tr>
+<td>a</td>
+<td>光标往后移一位，进入插入模式</td>
+</tr>
+<tr>
+<td>⇧ + a</td>
+<td>跳到行尾，进入插入模式</td>
+</tr>
+<tr>
+<td>o</td>
+<td>当前行下一行新建空行，并进入插入模式</td>
+</tr>
+</tbody></table>
+<ul>
+<li>视图模式</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v</td>
+<td>进入视图模式(相当于鼠标左键按下并选中某一部分)</td>
+</tr>
+</tbody></table>
+<ul>
+<li>删除</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>x</td>
+<td>剪切，相当于<code>command + x</code></td>
+</tr>
+<tr>
+<td>s</td>
+<td>删除光标所在字符，并进入插入模式</td>
+</tr>
+<tr>
+<td>cc</td>
+<td>清空当前行，并进入插入模式</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>删除当前行，但不进入插入模式</td>
+</tr>
+<tr>
+<td>di + (</td>
+<td>删除小括号内的内容</td>
+</tr>
+<tr>
+<td>di + {</td>
+<td>删除大括号内的内容</td>
+</tr>
+<tr>
+<td>: a, b d</td>
+<td>删除 a 到 b 行的内容</td>
+</tr>
+<tr>
+<td>ndd</td>
+<td>从当前行删除n行</td>
+</tr>
+</tbody></table>
+<ul>
+<li>命令行模式</li>
+<li>s：substitute 替换</li>
+<li>g：global全局</li>
+<li>c：confirm确认</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/pattern</td>
+<td>从光标位置向下查找，按下n表示下一个，N表示上一个</td>
+</tr>
+<tr>
+<td>?pattern</td>
+<td>从光标位置向上查找，按下n表示下一个，N表示上一个</td>
+</tr>
+<tr>
+<td>:%s/p1/p2/g</td>
+<td>将文中所有p1替换成p2</td>
+</tr>
+<tr>
+<td>:%s/p1/p2/g</td>
+<td>将文中所有p1替换成p2，替换时需要确认</td>
+</tr>
+</tbody></table>
+<h3 id="vim配置"><a href="#vim配置" class="headerlink" title="vim配置"></a>vim配置</h3><ul>
+<li>查看具体的配置文件在哪<code>vim --version</code></li>
+</ul>
+<img src="/images/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/image-20200809004431264.png" alt="image-20200809004431264" style="zoom:50%;" / loading="lazy">
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> number <span class="string">&quot; 设置行号                                                                  </span></span><br><span class="line"><span class="string">set textwidth=88 &quot;</span> 设置行宽</span><br><span class="line"><span class="built_in">set</span> nowrap <span class="string">&quot; 关闭自动折行</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">syntax enable &quot;</span> 设置语法高亮</span><br><span class="line"><span class="built_in">set</span> showmatch <span class="string">&quot; 匹配括号</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">set t_Co=256 &quot;</span> 设置256色</span><br><span class="line"><span class="built_in">set</span> cursorline <span class="string">&quot; 所在行显示下划线</span></span><br><span class="line"><span class="string">hi CursorLine cterm=none ctermbg=DarkMagenta ctermfg=White &quot;</span> 设置所在行高亮，文字变化，</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> ignorecase <span class="string">&quot; 搜索忽略大小写</span></span><br><span class="line"><span class="string">set smartcase &quot;</span> 大小写智能匹配</span><br><span class="line"><span class="built_in">set</span> hlsearch <span class="string">&quot; 搜索结果高亮</span></span><br><span class="line"><span class="string">set incsearch &quot;</span> 搜索结果动态匹配</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> cindent <span class="string">&quot; 设置缩进</span></span><br><span class="line"><span class="string">set expandtab &quot;</span> Tab扩展功能</span><br><span class="line"><span class="built_in">set</span> tabstop=4 <span class="string">&quot; 1 Tab = 4空格</span></span><br><span class="line"><span class="string">set softtabstop=4</span></span><br><span class="line"><span class="string">set shiftwidth=4</span></span><br><span class="line"><span class="string">set smarttab</span></span><br></pre></td></tr></table></figure>
+
+
+
+</div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>犇</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://benbenit.cn/2020/08/09/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/" title="MacBook初始化">https://benbenit.cn/2020/08/09/MacBook%E5%88%9D%E5%A7%8B%E5%8C%96/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2020/08/09/Ubuntu%E5%88%9D%E5%A7%8B%E5%8C%96/" rel="prev" title="Ubuntu初始化"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">Ubuntu初始化</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2020/07/21/APC%E6%9C%BA%E5%88%B6/" rel="next" title="APC机制"><span class="post-nav-text">APC机制</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>点击按钮跳转 GitHub Issues 评论。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" target="_blank" rel="noopener" href="https://github.com/benbenit/benbenit.github.io/issues?q=is:issue+MacBook初始化">GitHub Issues</a></div></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2020 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 犇</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.2.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.0.0</span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><script>const date = new Date();
+const today = (date.getMonth() + 1) + "-" + date.getDate()
+const mourn_days = ["4-4","9-18"]
+if (mourn_days.includes(today)) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><script src="https://cdn.jsdelivr.net/npm/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"https://cdn.jsdelivr.net/npm/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body></html>

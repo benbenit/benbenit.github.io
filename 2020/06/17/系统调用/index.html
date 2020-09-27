@@ -1,0 +1,309 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="犇"><meta name="copyright" content="犇"><meta name="generator" content="Hexo 5.2.0"><meta name="theme" content="hexo-theme-yun"><title>系统调用 | 🐂🐃🐄🦏</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="none" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.19/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_stqaphw3j4.js" async></script><link rel="shortcut icon" type="image/svg+xml" href="/favicon.png"><link rel="mask-icon" href="/favicon.png" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="🐂🐃🐄🦏" type="application/atom+xml"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"犇犇小站","version":"1.0.0","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true}};
+  </script><meta name="description" content="系统调用API函数的调用过程(3环部分)Windows API Application Programming Interface ，简称API函数，后续一般叫API，知道指的就是API函数就行 在Windows平台开发是绕不开Windows提供的API的，比如C语言里面的malloc函数，底层也是调用的windows的api函数。所以如果想知道一个程序是如何执行的，首先要知道api是如何被调">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系统调用">
+<meta property="og:url" content="https://benbenit.cn/2020/06/17/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/index.html">
+<meta property="og:site_name" content="🐂🐃🐄🦏">
+<meta property="og:description" content="系统调用API函数的调用过程(3环部分)Windows API Application Programming Interface ，简称API函数，后续一般叫API，知道指的就是API函数就行 在Windows平台开发是绕不开Windows提供的API的，比如C语言里面的malloc函数，底层也是调用的windows的api函数。所以如果想知道一个程序是如何执行的，首先要知道api是如何被调">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618105500679-6967373.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618113738986-6967373.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200617212733366-6967372.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200617213058126-6967373.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200617214303558-6967373.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618125206363-6967374.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618130217269-6967373.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618134733223-6967374.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618135715682-6967374.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618141110969-6967374.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618142708944-6967378.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618151734552-6967376.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618152224578-6967379.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618152548997-6967379.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618153126448-6967375.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618153642378-6967377.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618170133914-6967379.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618170150944-6967378.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618163013556-6967384.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618173944400-6967381.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618165007739-6967378.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618184414830-6967379.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200619131801989-6967382.png">
+<meta property="og:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200619135322417-6967382.png">
+<meta property="article:published_time" content="2020-06-17T03:42:00.000Z">
+<meta property="article:modified_time" content="2020-08-15T03:38:44.622Z">
+<meta property="article:author" content="犇">
+<meta property="article:tag" content="系统调用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://benbenit.cn/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618105500679-6967373.png"><script src="/js/ui/mode.js"></script></head><body><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="犇"><img width="96" loading="lazy" src="/avatar.gif" alt="犇"></a><div class="site-author-name"><a href="/about/">犇</a></div><a class="site-name" href="/about/site.html">🐂🐃🐄🦏</a><sub class="site-subtitle">文字是有温度的</sub><div class="site-desciption">犇の博客</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">21</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">10</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">18</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/benbenit" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:893880071@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">系统调用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#API%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B-3%E7%8E%AF%E9%83%A8%E5%88%86"><span class="toc-number">1.1.</span> <span class="toc-text">API函数的调用过程(3环部分)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-API"><span class="toc-number">1.1.1.</span> <span class="toc-text">Windows API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90ReadProcessMemeory"><span class="toc-number">1.1.2.</span> <span class="toc-text">分析ReadProcessMemeory</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BE%E5%90%8E%E7%BB%83%E4%B9%A0"><span class="toc-number">1.1.3.</span> <span class="toc-text">课后练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B-3%E7%8E%AF%E8%BF%9B0%E7%8E%AF-%E4%B8%8A"><span class="toc-number">1.2.</span> <span class="toc-text">API函数的调用过程(3环进0环 上)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#KUSER-SHARED-DATA"><span class="toc-number">1.2.1.</span> <span class="toc-text">_KUSER_SHARED_DATA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x7ffe0300%E5%88%B0%E5%BA%95%E5%AD%98%E5%82%A8%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.2.2.</span> <span class="toc-text">0x7ffe0300到底存储的是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B0%E7%8E%AF%E9%9C%80%E8%A6%81%E6%9B%B4%E6%94%B9%E5%93%AA%E4%BA%9B%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">进0环需要更改哪些寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E9%97%A8%E8%BF%9B0%E7%8E%AF"><span class="toc-number">1.2.4.</span> <span class="toc-text">中断门进0环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E8%B0%83%E7%94%A8%E8%BF%9B0%E7%8E%AF"><span class="toc-number">1.2.5.</span> <span class="toc-text">快速调用进0环</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B-3%E7%8E%AF%E8%BF%9B0%E7%8E%AF-%E4%B8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">API函数的调用过程(3环进0环 下)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#INT-0x2E%E8%BF%9B0%E7%8E%AF"><span class="toc-number">1.3.1.</span> <span class="toc-text">INT 0x2E进0环</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8IDT%E8%A1%A8%E4%B8%AD%E6%89%BE%E5%88%B00x2E"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">在IDT表中找到0x2E</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sysenter%E8%BF%9B0%E7%8E%AF"><span class="toc-number">1.3.2.</span> <span class="toc-text">sysenter进0环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0"><span class="toc-number">1.3.4.</span> <span class="toc-text">练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B-%E4%BF%9D%E5%AD%98%E7%8E%B0%E5%9C%BA"><span class="toc-number">1.4.</span> <span class="toc-text">API函数的调用过程(保存现场)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B-%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%E8%A1%A8"><span class="toc-number">1.5.</span> <span class="toc-text">API函数的调用过程(系统服务表)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%E8%A1%A8"><span class="toc-number">1.5.1.</span> <span class="toc-text">系统服务表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API%E5%87%BD%E6%95%B0%E7%9A%84%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B-SSDT"><span class="toc-number">1.6.</span> <span class="toc-text">API函数的调用过程(SSDT)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%E8%A1%A8"><span class="toc-number">1.6.1.</span> <span class="toc-text">如何访问系统服务表</span></a></li></ol></li></ol></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://benbenit.cn/2020/06/17/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="犇"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="🐂🐃🐄🦏"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">系统调用</h1><div class="post-meta"><div class="post-time" style="display:block"></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">3.9k</span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">操作系统</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">系统调用</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><a id="more"></a>
+
+<h1 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h1><h2 id="API函数的调用过程-3环部分"><a href="#API函数的调用过程-3环部分" class="headerlink" title="API函数的调用过程(3环部分)"></a>API函数的调用过程(3环部分)</h2><h3 id="Windows-API"><a href="#Windows-API" class="headerlink" title="Windows API"></a>Windows API</h3><ul>
+<li>Application Programming Interface ，简称API函数，后续一般叫API，知道指的就是API函数就行</li>
+<li>在Windows平台开发是绕不开Windows提供的API的，比如C语言里面的malloc函数，底层也是调用的windows的api函数。所以如果想知道一个程序是如何执行的，首先要知道api是如何被调用的</li>
+<li>Windows的API主要放在C:\WINDOWS\systems32下面所有的dll</li>
+<li>几个重要的dll</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kernel32.dll 最核心的功能模块，比如内存管理，进程线程相关函数</span><br><span class="line">user32.dll 用户界面相关的应用程序接口，如创建窗口和发送消息</span><br><span class="line">gdi32.dll 画图和显示文本，比如要显示一个程序窗口，就是调用了这个模块中的函数画出来的</span><br><span class="line">ntdll.dll 大多数API都会通过这个dll进<span class="number">0</span>环(内核)</span><br></pre></td></tr></table></figure>
+
+<h3 id="分析ReadProcessMemeory"><a href="#分析ReadProcessMemeory" class="headerlink" title="分析ReadProcessMemeory"></a>分析ReadProcessMemeory</h3><ul>
+<li>通过这个函数，演示如何执行，怎么进0环</li>
+<li>打开IDA，左侧函数名点击<code>Alt+t</code>，搜索ReadProcessMemory</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618105500679-6967373.png" alt="image-20200618105500679" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>从汇编代码可以看出，这个函数主要就是调用了另外一个函数NtReadVirtualMemory</li>
+<li>跟进去发现这个函数也没有做什么工作，这是因为真正的实现是在0环实现的，这里只是提供了一个入口让应用程序去调用</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618113738986-6967373.png" alt="image-20200618113738986" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>首先提供一个编号0BA，对应内核里的一个函数</li>
+<li>然后把内存地址<strong>7FFE0300</strong>里的值放到edx里，这个内存地址里也存了一个值，代表一个函数，决定了以什么方式进0环</li>
+</ul>
+<h3 id="课后练习"><a href="#课后练习" class="headerlink" title="课后练习"></a>课后练习</h3><ul>
+<li>自己编写WriteProcessMemory函数(不使用任何dll，直接调用0环函数)</li>
+<li>意义: 自己实现API，可以避免3环恶意挂钩</li>
+</ul>
+<h2 id="API函数的调用过程-3环进0环-上"><a href="#API函数的调用过程-3环进0环-上" class="headerlink" title="API函数的调用过程(3环进0环 上)"></a>API函数的调用过程(3环进0环 上)</h2><ul>
+<li>之前清楚了应用程序在3环做了些什么，调了哪些函数。现在学习一下NtReadVirtualMemory到底做了什么。想了解这个函数做了什么，还要了解<code>7FFE0000</code>这块内存</li>
+</ul>
+<h3 id="KUSER-SHARED-DATA"><a href="#KUSER-SHARED-DATA" class="headerlink" title="_KUSER_SHARED_DATA"></a>_KUSER_SHARED_DATA</h3><ul>
+<li>这是0环和3环共享的一块内存，这块内存0环和3环都可以访问，地址是确定的，也就是说这块物理页只有一份，只不过映射的虚拟地址有两份</li>
+<li>他们使用固定的地址值映射</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User层：<span class="number">0x7ffe</span> <span class="number">0000</span></span><br><span class="line">Kernel层：<span class="number">0xffdf</span> <span class="number">0000</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>虽然指向的是同一个物理页，但是User层是只读的，Kernel层是可写的</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200617212733366-6967372.png" alt="image-20200617212733366" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>共享的其他部分先不关注，先看一下这个结构体</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200617213058126-6967373.png" alt="image-20200617213058126" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>在0x300的位置是这个函数的名字，叫做SystemCall。也就是说上面进到ntdll里面，NtReadVirtualMemory函数进0环调用的就是这个SystemCall函数，具体是什么，接着往下看</li>
+</ul>
+<h3 id="0x7ffe0300到底存储的是什么"><a href="#0x7ffe0300到底存储的是什么" class="headerlink" title="0x7ffe0300到底存储的是什么"></a>0x7ffe0300到底存储的是什么</h3><ul>
+<li>实验：是否支持快速调用</li>
+<li>如果处理器还可以，支持sysenter/sysexit这种指令，windows提供了一个函数<strong>KiFastSystemCall()**，而CPU比较老的话，不支持sysenter/sysexit这种指令，Windows有提供了另外一个函数</strong>KiIntSystemCall()**</li>
+<li>cpuid这个指令可以查看是否支持，但这个指令需要eax传参数1，执行之后会把结果放到ecx和edx里，如果edx的第11位，也就是SEP位为1的话，就说明支持</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200617214303558-6967373.png" alt="image-20200617214303558" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>执行之后倒数第3位是B(1011)，二进制11位是1</li>
+<li>操作系统在启动的时候，就会向上面一样，使用cpuid检查是否支持sysenter，如果支持，就会把KiFastSystemCall这个函数的地址放到_KUSER_SHARED_DATA这个结构体的0x300偏移的位置，不支持就把另一个函数地址放到这个位置</li>
+<li>那这两个函数到底做了什么事情，还需要补充些知识</li>
+</ul>
+<h3 id="进0环需要更改哪些寄存器"><a href="#进0环需要更改哪些寄存器" class="headerlink" title="进0环需要更改哪些寄存器"></a>进0环需要更改哪些寄存器</h3><ul>
+<li>CS的权限由3变成0 意味着新的CS</li>
+<li>SS的权限与CS权限永远一致，意味着新的SS</li>
+<li>权限切换的时候，堆栈也一定会切换，所以需要新的ESP</li>
+<li>进0环后要知道代码在什么位置，意味着需要EIP</li>
+<li>上面是在学中断门的时候，学的进0环需要修改哪些寄存器</li>
+<li>有了上面的知识，应该就可以推测这两个系统调用的函数的作用，就是为了提供这4个值怎么找，只不过这两个函数提供了两种不同的找法</li>
+</ul>
+<h3 id="中断门进0环"><a href="#中断门进0环" class="headerlink" title="中断门进0环"></a>中断门进0环</h3><img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618125206363-6967374.png" alt="image-20200618125206363" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>当调用函数的时候会压入很多参数，首先这个函数会把参数的指针放入edx里，而在这个函数执行前，已经往eax里放入了一个内核函数的编号，这个编号把它称为<strong>系统调用号</strong></li>
+<li>也就是说，这个函数里已经有两个参数很重要了，一个是eax，说明了要用的内核函数的编号是多少，另一个就是edx，说明要用的参数在哪里</li>
+<li>把这两个记录好之后，直接通过中断门的形式进入内核</li>
+<li>上面就是CPU不支持sysenter的时候，是通过中断的形式进到内核。而且中断门统一的中断号都是<strong>2E</strong></li>
+</ul>
+<h3 id="快速调用进0环"><a href="#快速调用进0环" class="headerlink" title="快速调用进0环"></a>快速调用进0环</h3><img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618130217269-6967373.png" alt="image-20200618130217269" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>当cpu支持sysenter的时候，systemcall就变成了KiFastSystemCall，这个函数先把3环的栈顶放到edx里，调用这个函数之前，eax里已经存了系统调用号</li>
+<li>而这里就没用使用中断门进0环，而是使用了sysenter指令</li>
+<li>sysenter与中断门有什么区别？<ul>
+<li>它们两个相同的地方，就是都为了找那4个值，CS,SS,ESP,EIP</li>
+<li>中断门进0环，需要的CS,SS,EIP在IDT表里面，而SS,ESP在TSS里面，因为他要查内存，所以速度上相对是比较慢的</li>
+<li>而CPU如果支持sysenter指令的话，操作系统会提前将CS,SS,ESP,EIP的值存储在MSR寄存器中，sysenter指令执行时，CPU会将MSR寄存器中的值直接写入相关的寄存器中，没有读内存的过程，所以叫<strong>快速调用</strong>，但两种方式的本质是一样的</li>
+</ul>
+</li>
+</ul>
+<h2 id="API函数的调用过程-3环进0环-下"><a href="#API函数的调用过程-3环进0环-下" class="headerlink" title="API函数的调用过程(3环进0环 下)"></a>API函数的调用过程(3环进0环 下)</h2><ul>
+<li>之前已经知道，可以通过中断门和快速调用进0环，现在来看一下进入0环之后的下一步，会做什么</li>
+</ul>
+<h3 id="INT-0x2E进0环"><a href="#INT-0x2E进0环" class="headerlink" title="INT 0x2E进0环"></a>INT 0x2E进0环</h3><ul>
+<li>之前的学习已经知道，要进入0环，4个寄存器是必须要更改的。CS和SS进0环之后必须切换成一个0环的段。ESP说明了切换到0环之后，堆栈在哪里，EIP说明了切换到0环之后要执行的指令在哪里。也就是说，正确地设置好这4个值，程序从3环进入到0环之后就可以正常执行了</li>
+</ul>
+<h4 id="在IDT表中找到0x2E"><a href="#在IDT表中找到0x2E" class="headerlink" title="在IDT表中找到0x2E"></a>在IDT表中找到0x2E</h4><ul>
+<li><img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618134733223-6967374.png" alt="image-20200618134733223" style="zoom:50%;" / loading="lazy"></li>
+<li>也就是说通过中断进入0环的时候，找到的是<code>8054ee00</code>00082451`，</li>
+<li>第5位是e，s位是0，第6位是e，这是一个中断门</li>
+<li>0008提供的就是CS</li>
+<li>80542451提供offset，那也就可以找到EIP</li>
+<li>SS,ESP从TSS里得到</li>
+<li>使用u指令，对offset进行反汇编</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618135715682-6967374.png" alt="image-20200618135715682" style="zoom:50%;" / loading="lazy">
+
+<h3 id="sysenter进0环"><a href="#sysenter进0环" class="headerlink" title="sysenter进0环"></a>sysenter进0环</h3><ul>
+<li>分析通过快速调用如何找到CS,SS,EIP,ESP</li>
+<li>这4个值从MSR寄存器得到，这个寄存器很大，如果想深入了解可以参考intel白皮书</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>MSR</th>
+<th>地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IA32_SYSENTER_CS</td>
+<td>174H</td>
+</tr>
+<tr>
+<td>IA32_SYSENTER_ESP</td>
+<td>175H</td>
+</tr>
+<tr>
+<td>IA32_SYSENTER_EIP</td>
+<td>176H</td>
+</tr>
+</tbody></table>
+<ul>
+<li>也就是说我们要找的4个值已经有3个存在这个寄存器里了，SS并没有直接写到这个寄存器里，是通过<code>CS+8</code>，这个值就是SS的段选择子，通过这个段选择子找到段描述符，计算出来的</li>
+<li>上面这些不是操作系统做的，而是CPU自己做的，硬件做的</li>
+<li>参考：Intel白皮书第二卷(搜索sysenter)</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618141110969-6967374.png" alt="image-20200618141110969" style="zoom:50%;" / loading="lazy">
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">API通过中断门进<span class="number">0</span>环：</span><br><span class="line">    <span class="number">1.</span> 固定的中断号是<span class="number">0x2E</span></span><br><span class="line">    <span class="number">2.</span> CS/EIP由门描述符提供 ESP/SS由TSS提供</span><br><span class="line">    <span class="number">3.</span> 进入<span class="number">0</span>换后执行内核函数是KiFastCallEntry+<span class="number">0x21</span>，即KiSystemService</span><br><span class="line"></span><br><span class="line">API通过sysenter指令进<span class="number">0</span>环：</span><br><span class="line">    <span class="number">1.</span> CS/ESP/EIP由MSR寄存器提供(SS是算出来的)</span><br><span class="line">    <span class="number">2.</span> 进入<span class="number">0</span>环后执行的内核函数：KiFastCallEntry</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>之前已经看过两个模块: kernel32.dll和ntdll.dll，这些dll是3环的dll</li>
+<li>真正的内核模块在ntoskrnl.exe和ntkrnlpa.exe这两个模块里面</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618142708944-6967378.png" alt="image-20200618142708944" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>至于用哪个，取决于系统启动的时候的分页模式，如果是10-10-12分页，用的是ntoskrnl.exe，如果是2-9-9-12分页，用的是ntkrnlpa.exe</li>
+<li>也就是说上面分析的中断门进0环的函数或者快速调用进0环的函数在这两个模块里面，可以使用IDA打开这两个模块进行分析，看看3环的程序进到0环以后到底做了什么事情</li>
+</ul>
+<h3 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h3><ul>
+<li>自己实现通过中断门直接调用内核函数</li>
+<li>通过IDA找到上面的0环函数并分析：<ul>
+<li>进0环后，原来的寄存器存在哪里</li>
+<li>如何根据系统调用号(EAX里)找到要执行的内核函数</li>
+<li>调用时参数是存储到3环的堆栈，如何传递给内核函数</li>
+<li>2中调用方式是如何返回到3环的</li>
+</ul>
+</li>
+</ul>
+<h2 id="API函数的调用过程-保存现场"><a href="#API函数的调用过程-保存现场" class="headerlink" title="API函数的调用过程(保存现场)"></a>API函数的调用过程(保存现场)</h2><ul>
+<li>学习一下，进0环以后，原来的寄存器存到哪里了</li>
+<li>拿KiSystemService举例，想要分析这个函数，首先要了解几个结构体</li>
+<li><strong>trap_frame</strong>这个结构体非常重要，不管是中断方式，还是快速调用方式进到0环，所有的寄存器，都会存到这个结构体里面，这个结构体是处在0环的结构体，本身是由Windows进行维护的</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618151734552-6967376.png" alt="image-20200618151734552" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li><strong>ETHREAD</strong>，第二个结构体是线程相关的结构体。线程对应的状态信息，在0环也有对应的结构体</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618152224578-6967379.png" alt="image-20200618152224578" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>在ETHREAD结构体里面 ，又有一个很重要的结构体<strong>KTHREAD</strong>，这个结构体里面存了对于这个线程结构体来说相对比较重要的信息</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618152548997-6967379.png" alt="image-20200618152548997" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>**KPCR(Process Control Region CPU控制区)**，线程有一个具体的结构体来描述他的状态，CPU本身也有一个结构体来描述他的状态。每一个CPU都有一个这样的KPCR结构体，来描述当前CPU所处的状态，几个核就有几个KPCR，查看几个核</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618153126448-6967375.png" alt="image-20200618153126448" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>查看KPCR。如果有2个核就会出现2个地址，1个核就出现一个地址。查看对应的KPCR结构体的内存地址</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618153642378-6967377.png" alt="image-20200618153642378" style="zoom:50%;" / loading="lazy">
+
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618170133914-6967379.png" alt="image-20200618170133914" style="zoom:50%;" / loading="lazy">
+
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618170150944-6967378.png" alt="image-20200618170150944" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>知道上面的结构体之后，就可以看代码了</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618163013556-6967384.png" alt="image-20200618163013556" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>上面的trap_frame最后面的4个成员在保护模式下是没有使用的，这几个是在虚拟8086模式下才会存储的值。之前学保护模式的时候，知道中断门发生的时候，会向0环的堆栈里面压入5个值，分别是3环的SS,ESP,EFLAG,CS,EIP。也就是说通过中断门进入0环的时候，在KiSystemService执行之前，在这个结构体里面已经有这5个值了。而通过sysenter进入0环的时候，这5个值是没有的，所以这就是为什么有两条线进入0环，如果都走一条线，这个结构体里压入的值都不一样了，就会出问题</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618173944400-6967381.png" alt="image-20200618173944400" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>在KISystemService中，<code>push 0</code>，压入的是0x64的位置，操作系统为了对齐，在这个位置补了一个0</li>
+<li>之后把3环的几个寄存器压栈</li>
+<li><code>mov fs, ebx</code></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ebx中存的是<span class="number">30</span></span><br><span class="line"><span class="number">30</span> =&gt; <span class="number">0011</span> <span class="number">0000</span></span><br><span class="line">查GDT</span><br><span class="line">Index = <span class="number">6</span></span><br></pre></td></tr></table></figure>
+
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618165007739-6967378.png" alt="image-20200618165007739" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>指向的正好是KPCR这个结构体</li>
+<li>这就是为什么，FS在3环进到0环之后，值会发生切换，因为所代表的结构不一样。3环的时候指向的是TEB结构，是线程的一个状态，这个后面会学。0环的时候，通过段描述符的Base指向KPCR</li>
+<li><code>mov esi, large fs:124h</code>，fs现在指向的是KPCR，所以现在就要找偏移124的位置是什么</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200618184414830-6967379.png" alt="image-20200618184414830" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>这个位置就是说的当前正在跑的线程的信息是什么样的，也就是说现在ESI里存的是KThread</li>
+<li>之后把先前模式压入</li>
+<li>然后<code>sub esp, 48h</code>就是提升堆栈，正好提升到了trap_frame偏移为0的位置</li>
+<li>之后取出3环压入的参数CS，和1进行与运算。也就是0环最低位是0，3环最低位是1</li>
+<li>然后把与完的结果放到esi+140的位置，也就是新的先前模式，这个先前模式指的是原来的CPU权限级别，如果原来是0环的，就存0，如果是3环的就存1。意义就是，有些内核代码可以从0环调用也可以从3环调用</li>
+<li>然后<code>mov ebp, esp</code>，提升栈底，都指向trap_frame</li>
+<li>最后把调试相关的寄存器也存到这个结构体里，如果把esi+2c的位置改成-1，就不会存储这些调试相关的寄存器</li>
+</ul>
+<h2 id="API函数的调用过程-系统服务表"><a href="#API函数的调用过程-系统服务表" class="headerlink" title="API函数的调用过程(系统服务表)"></a>API函数的调用过程(系统服务表)</h2><ul>
+<li>之前学到进入0环后，3环的各种寄存器会保存在trap_frame中</li>
+<li>接下来学习<ul>
+<li>如何根据系统服务号找到要执行的函数？</li>
+<li>调用时参数是存储到3环的堆栈，如何传递给内核函数？</li>
+</ul>
+</li>
+</ul>
+<h3 id="系统服务表"><a href="#系统服务表" class="headerlink" title="系统服务表"></a>系统服务表</h3><ul>
+<li>如果想了解上面的问题，就要先了解什么是系统服务表</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200619131801989-6967382.png" alt="image-20200619131801989" style="zoom:50%;" / loading="lazy">
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">service: 存储指针，指向一张表，里面全是函数的地址，每一个成员<span class="number">4</span>字节</span><br><span class="line">count：当前的系统服务表被调用了多少次</span><br><span class="line">ServiceLimit: 当前的系统服务表有多少个函数</span><br><span class="line">ArgmentTable: 函数参数的个数，是以字节为单位的</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>系统服务表一共只有两张。比如上面绿色表示的是内核函数导出的函数，也就是从ntoskrnl.exe里导出的，但并不是说所有的函数都导出来了，只是最常用的那一部分。函数地址表和函数参数表的对应关系是一致的</li>
+<li>黄色的部分表示另一个系统服务表，里面所有的函数都是win32k.sys这个模块的导出的函数，是一些与图形显示以及用户界面相关的系统服务</li>
+<li>知道了有系统服务表，那程序执行的时候去哪里找这两张系统服务表？</li>
+<li>之前的学习中，已经知道了每一个线程在0环都有一个结构体来描述当前线程的信息，在线程结构体里面又有KTHREAD这样一个结构体，在这个结构体0xE0的偏移处，存的就是系统服务表的地址</li>
+<li>在从3环进入0环的时候，从EAX里面传了一个系统服务号，这个系统服务号将决定要调用函数怎么找，在哪里；参数怎么找，在哪里</li>
+<li>虽然系统服务号有32位，但真正使用的只有低13位</li>
+</ul>
+<img src="/images/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/image-20200619135322417-6967382.png" alt="image-20200619135322417" style="zoom:50%;" / loading="lazy">
+
+<ul>
+<li>第13位决定查哪张系统服务表</li>
+<li>后面的12位就是对应的函数表的索引，比如知道函数地址表里第二个，那他的参数在函数参数表里也是第二个</li>
+</ul>
+<h2 id="API函数的调用过程-SSDT"><a href="#API函数的调用过程-SSDT" class="headerlink" title="API函数的调用过程(SSDT)"></a>API函数的调用过程(SSDT)</h2><ul>
+<li>上面学过了系统服务表的结构，以及如何找到系统服务表，除了这种方式，还能用另外一种方式来寻找系统服务表</li>
+</ul>
+<h3 id="如何访问系统服务表"><a href="#如何访问系统服务表" class="headerlink" title="如何访问系统服务表"></a>如何访问系统服务表</h3><ul>
+<li><strong>SSDT(System Service Descriptor Table) 系统描述符表</strong></li>
+<li>它本身是kernel文件导出的一个全局变量</li>
+</ul>
+</div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>犇</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://benbenit.cn/2020/06/17/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" title="系统调用">https://benbenit.cn/2020/06/17/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2020/07/21/%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91/" rel="prev" title="驱动开发"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">驱动开发</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2020/06/17/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/" rel="next" title="进程与线程"><span class="post-nav-text">进程与线程</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>点击按钮跳转 GitHub Issues 评论。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" target="_blank" rel="noopener" href="https://github.com/benbenit/benbenit.github.io/issues?q=is:issue+系统调用">GitHub Issues</a></div></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2019 – 2020 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 犇</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.2.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.0.0</span></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><script>const date = new Date();
+const today = (date.getMonth() + 1) + "-" + date.getDate()
+const mourn_days = ["4-4","9-18"]
+if (mourn_days.includes(today)) {
+  document.documentElement.style.filter = "grayscale(1)";
+}</script></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script><script src="https://cdn.jsdelivr.net/npm/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"https://cdn.jsdelivr.net/npm/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body></html>
