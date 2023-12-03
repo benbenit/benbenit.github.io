@@ -1,190 +1,191 @@
-
 <!DOCTYPE html>
 <html lang="cn">
 <head>
-    <meta charset="utf-8" />
-    <title>笨笨学中医</title>
-    <meta name="author" content="benbenit" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <link rel="icon" href="/images/avatar.jpg" />
-    <link rel="preconnect" href="https://cdn.staticfile.org" />
-<script src="https://cdn.staticfile.org/vue/3.3.7/vue.global.prod.min.js"></script>
-<link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.4.2/css/all.min.css" />
-<link rel="preconnect" href="https://fonts.loli.net" />
-<link rel="preconnect" href="https://gstatic.loli.net" crossorigin />
-<link rel="stylesheet" href="https://fonts.loli.net/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap" />
-<script> const mixins = {}; </script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<link rel="stylesheet" href="/css/main.css">
 
 
-<script src="https://cdn.staticfile.org/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://cdn.staticfile.org/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
-<link
-    rel="stylesheet"
-    href="https://cdn.staticfile.org/highlight.js/11.9.0/styles/github.min.css"
-/>
-<script src="/js/lib/highlight.js"></script>
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="笨笨学中医">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="笨笨学中医">
+<meta property="og:locale">
+<meta property="article:author" content="benbenit">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'cn'
+  };
+</script>
+
+  <title>笨笨学中医</title>
+  
 
 
 
-<script src="/js/lib/preview.js"></script>
 
 
 
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
 
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
-<script src="/js/lib/home.js"></script>
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
 
-<link rel="stylesheet" href="/css/main.css" />
+</head>
 
-<meta name="generator" content="Hexo 7.0.0"></head>
-<body>
-    <div id="layout">
-        <transition name="fade">
-            <div id="loading" v-show="loading">
-                <div id="loading-circle">
-                    <h2>LOADING</h2>
-                    <p>加载过慢请开启缓存 浏览器默认开启</p>
-                    <img src="/images/loading.gif" />
-                </div>
-            </div>
-        </transition>
-        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
-    <nav id="desktop-menu">
-        <a class="title" href="/">
-            <span>笨笨学中医</span>
-        </a>
-        
-        <a href="/">
-            <i class="fa-solid fa-house fa-fw"></i>
-            <span>&ensp;Home</span>
-        </a>
-        
-        <a href="/about">
-            <i class="fa-solid fa-id-card fa-fw"></i>
-            <span>&ensp;About</span>
-        </a>
-        
-        <a href="/archives">
-            <i class="fa-solid fa-box-archive fa-fw"></i>
-            <span>&ensp;Archives</span>
-        </a>
-        
-        <a href="/categories">
-            <i class="fa-solid fa-bookmark fa-fw"></i>
-            <span>&ensp;Categories</span>
-        </a>
-        
-        <a href="/tags">
-            <i class="fa-solid fa-tags fa-fw"></i>
-            <span>&ensp;Tags</span>
-        </a>
-        
-    </nav>
-    <nav id="mobile-menu">
-        <div class="title" @click="showMenuItems = !showMenuItems">
-            <i class="fa-solid fa-bars fa-fw"></i>
-            <span>&emsp;笨笨学中医</span>
-        </div>
-        <transition name="slide">
-            <div class="items" v-show="showMenuItems">
-                
-                <a href="/">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-house fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
-                    </div>
-                </a>
-                
-                <a href="/about">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-id-card fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
-                    </div>
-                </a>
-                
-                <a href="/archives">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-box-archive fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Archives</div>
-                    </div>
-                </a>
-                
-                <a href="/categories">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-bookmark fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Categories</div>
-                    </div>
-                </a>
-                
-                <a href="/tags">
-                    <div class="item">
-                        <div style="min-width: 20px; max-width: 50px; width: 10%">
-                            <i class="fa-solid fa-tags fa-fw"></i>
-                        </div>
-                        <div style="min-width: 100px; max-width: 150%; width: 20%">Tags</div>
-                    </div>
-                </a>
-                
-            </div>
-        </transition>
-    </nav>
-</div>
-<transition name="fade">
-    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
-</transition>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
 
-        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="home-head">
-    <div id="home-background" ref="homeBackground" data-images="/images/background.jpg"></div>
-    <div id="home-info" @click="homeClick">
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="info">
-            <div class="wrap">
-                <h1>笨笨学中医</h1>
-                <h3>BenBenZY</h3>
-                <h5></h5>
-            </div>
-        </span>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
-</div>
-<div id="home-posts-wrap" true ref="homePostsWrap">
-    <div id="home-posts">
-        
+  </div>
 
-<div class="post">
-    <a href="/posts/2023/12/undefined.html">
-        <h2 class="post-title">小白学中医</h2>
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">笨笨学中医</h1>
+      <span class="logo-line-after"><i></i></span>
     </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2023/12/3
-        </span>
-        
-        
+      <p class="site-subtitle" itemprop="description">BenBenZY</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
-    <div class="description">
-        <div class="content" v-pre>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
             
-            <h1 id="小白学中医"><a href="#小白学中医" class="headerlink" title="小白学中医"></a>小白学中医</h1><p>中医学习中的奇思妙想，未验证的理论，希望你永远保持好奇心和想象力</p>
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/2023/12/undefined.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="benbenit">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="笨笨学中医">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2023/12/undefined.html" class="post-title-link" itemprop="url">小白学中医</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-12-03 20:53:44 / Modified: 21:10:49" itemprop="dateCreated datePublished" datetime="2023-12-03T20:53:44+08:00">2023-12-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="小白学中医"><a href="#小白学中医" class="headerlink" title="小白学中医"></a>小白学中医</h1><p>中医学习中的奇思妙想，未验证的理论，希望你永远保持好奇心和想象力</p>
 <h2 id="气"><a href="#气" class="headerlink" title="气"></a>气</h2><p>中医中的气在什么地方流动，气如果组成名词常组的有一个词叫脾气，叫心气，叫风气。那么风有什么特性，在八卦中，风为巽，无孔不入的意思，那么也就是说没有孔的地方，风是不会去的，那么人体上，最大的孔就是皮肤毛孔。这是人肉眼可以看见的孔，那么在人体内是否也有像指纹，像皮肤纹路一样的孔呢？这样思考的话，所谓的经络，奇穴，是不是可以认为是皮肤之下，气可以钻入的孔穴。而皮肤所谓的光滑，就是经络中气充实，足以将皮肤撑起，而气不足，纹路就会下陷，就会产生皱纹。所以，按照我的思路，针灸应该对美容养颜以及健康会有奇效。</p>
 <h2 id="子午流注"><a href="#子午流注" class="headerlink" title="子午流注"></a>子午流注</h2><p>紫微斗数里面有12个宫位，一天有12个时辰，人体有12条经络</p>
 <p>这是不是说宇宙本就没有时间，空间的概念。</p>
@@ -204,54 +205,73 @@
 <p>在子时，由正北方吸引坎水气，以聚胆经</p>
 <p>在丑时，由东北方吸引艮土气，以聚肝经</p>
 
-            
-        </div>
+      
     </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E6%B0%94-%E5%AD%90%E5%8D%88%E6%B5%81%E6%B3%A8/" style="color: #00a596">气, 子午流注</a>
-        </span>
-        
-    </div>
-    <a href="/posts/2023/12/undefined.html" class="go-post">阅读全文</a>
-</div>
 
-<div class="post">
-    <a href="/posts/2023/12/undefined.html">
-        <h2 class="post-title">关于</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E5%85%B6%E4%BB%96/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                其他
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/2023/12/undefined.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="benbenit">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="笨笨学中医">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2023/12/undefined.html" class="post-title-link" itemprop="url">关于</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-12-03 20:52:53 / Modified: 21:10:31" itemprop="dateCreated datePublished" datetime="2023-12-03T20:52:53+08:00">2023-12-03</time>
             </span>
-            2023/12/3
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <h1 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h1><p>这是新博客开篇的第一篇文章，关于如今，关于过去，关于未来。</p>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h1><p>这是新博客开篇的第一篇文章，关于如今，关于过去，关于未来。</p>
 <h2 id="关于友情"><a href="#关于友情" class="headerlink" title="关于友情"></a>关于友情</h2><p>在人生三十年的旅途中，感谢认识一群形形色色的兄弟朋友。回忆起相处的点点滴滴，挺感谢他们的陪伴。最近的一次是从广州回老家，在上飞机的路上，听了一路的睡在上铺的兄弟，眼泪真的很不争气地往下流，幸好戴着口罩不怕丢人。就像回到了大学时代，是可以将所有心思说出来听的兄弟。再往前，第一次当伴郎，喜悦，是一切尽在不言中的我懂，是小学打闹进垃圾桶的近二十年的友情化亲情。还有好多好多，虽不常联系，但感情依旧的友谊。友情，比爱情长久，比亲情自由。</p>
 <h2 id="关于爱情"><a href="#关于爱情" class="headerlink" title="关于爱情"></a>关于爱情</h2><p>爱情，最憧憬，也最失败的感情。以前纯粹到希望找一个像友情一样可以无条件信任，可以像亲情一样不管怎么吵都会在一起的人。现在想想，太理想化了。以前会想认定的人不管怎样都要努力在一起，现在觉得放各自归人海，走一段算缘分，走不下去也常怀感恩遇见吧。我试着跟自己不喜欢但主动接近自己的人处过对象，很别扭，因为就像完成一项任务一样，在知道海后之后，心里反而松了口气，终于不用因为别人爱自己而勉强自己了，虽然这不算爱。有些发自内心的关心，是跟不喜欢的人在一起怎么装也装不出来的。</p>
 <h2 id="关于亲情"><a href="#关于亲情" class="headerlink" title="关于亲情"></a>关于亲情</h2><p>应该不止是我吧，很多在外面闯荡的人应该都会觉得最愧对的，是自己的父母吧。承接了自己的欢喜，也包容了自己的无助等负面情绪。</p>
@@ -259,129 +279,250 @@
 <h2 id="关于低谷"><a href="#关于低谷" class="headerlink" title="关于低谷"></a>关于低谷</h2><p>以前心里难受，会找很多好兄弟喝酒，会诉说。后来去到上海之后，因为知道每个人有每个人的不容易，所以学会了什么都不说，学会了报喜不报忧。然后，像被压着屈服。以前见谁都很温和，觉得身边都是好人。后来发现并不是这样，尤其是那种人前一套背后一套，还拿捏着你前途的人，很憋屈。有些选择，如果不是有身受的话，应该也不会感同。或许只有不友好的环境，才会让善良带着锋芒。运动，是走出低谷最有效的方式。</p>
 <h2 id="关于未来"><a href="#关于未来" class="headerlink" title="关于未来"></a>关于未来</h2><p>未来，都是现在一步一步走出来的。祝我在乎的人未来健康，快乐一生。</p>
 
-            
-        </div>
+      
     </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E9%9A%8F%E7%AC%94/" style="color: #00bcd4">随笔</a>
-        </span>
-        
-    </div>
-    <a href="/posts/2023/12/undefined.html" class="go-post">阅读全文</a>
-</div>
 
-<div class="post">
-    <a href="/posts/2023/11/undefined.html">
-        <h2 class="post-title"></h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/2023/11/undefined.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="benbenit">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="笨笨学中医">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2023/11/undefined.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-11-25 08:46:08" itemprop="dateCreated datePublished" datetime="2023-11-25T08:46:08+08:00">2023-11-25</time>
             </span>
-            2023/11/25
-        </span>
-        
-        
-    </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <h1 id="社区小确幸小程序开发白皮书"><a href="#社区小确幸小程序开发白皮书" class="headerlink" title="社区小确幸小程序开发白皮书"></a>社区小确幸小程序开发白皮书</h1><p>这是一款基于人性美的小程序。这是一款独立的个人开发的小程序，不会有广告收入，也不承接广告，完全靠打赏，用爱发电，等哪天承受不住压力，就会宕掉。但希望这个idea可以启发下一个用爱发电的独立开发者，若想fork，我将开源所有源码，但请不要变质，谢谢。</p>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-12-03 21:09:51" itemprop="dateModified" datetime="2023-12-03T21:09:51+08:00">2023-12-03</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="社区小确幸小程序开发白皮书"><a href="#社区小确幸小程序开发白皮书" class="headerlink" title="社区小确幸小程序开发白皮书"></a>社区小确幸小程序开发白皮书</h1><p>这是一款基于人性美的小程序。这是一款独立的个人开发的小程序，不会有广告收入，也不承接广告，完全靠打赏，用爱发电，等哪天承受不住压力，就会宕掉。但希望这个idea可以启发下一个用爱发电的独立开发者，若想fork，我将开源所有源码，但请不要变质，谢谢。</p>
 <h2 id="灵感"><a href="#灵感" class="headerlink" title="灵感"></a>灵感</h2><p>这个灵感来源于一个I人，INFP-T，一个极致的理想主义者，一个不善言辞却内心丰富的大直男。在一线城市学习，工作，生活。上学有同学，上班有同事，那下了班呢，或许I人接触最多的或许是各种各样的虚拟网络。但这种虚拟网络在某些不经意的日子，会带来惶恐的空洞感。想接触人群，却又怕打扰别人。而e人，这种社交牛人，在一个社区肯定是存在的。有时候，I人看着E人滔滔不绝，也挺幸福。所以，想开发一款基于陌生人，但又可能产生某种生活联结的小程序。</p>
 <h2 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h2><p>这个小程序，也是一款只防君子，不防小人的小程序。我愿相信，每个人心中都有一块向善的纯粹之地，如果你赞成，来吧，欢迎你。但为了减少不必要的纠纷，避免诈骗等污染这款毫不利己的小程序，这款小程序仅限于社区，且一旦实名注册会限定您注册的地点，只有在最少一年之后才可以相同的身份更改社区。设置最短年限虽然对于短租用户不太友好，但为了减少因为人与人之间的信任带来的隔阂，希望您理解这份用意。</p>
 <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>用户在登录小程序之后会写下自己的碎碎念，或者定下自己的目标，然后约定完成目标的时间，在时间达到之后，你可以选择打开别人投放到小确幸的盲盒，可能是实物，可能是一张纸条，一段文字。</p>
 <p>这些盲盒中的物品</p>
 
-            
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
         </div>
-    </div>
-    <div class="post-tags">
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">benbenit</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
         
-        
-        
-    </div>
-    <a href="/posts/2023/11/undefined.html" class="go-post">阅读全文</a>
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
 </div>
 
 
-        <div class="page-current">
-    
-    <span class="current">1</span>
-    
-    
-    
-    
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">benbenit</span>
 </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
 
-    </div>
-    
-    <div id="home-card">
-        <div id="card-style">
-    <div id="card-div">
-        <div class="avatar">
-            <img src="/images/avatar.jpg" alt="avatar" />
-        </div>
-        <div class="name">benbenit</div>
-        <div class="description">
-            <p>Description<br>…</p>
+        
 
-        </div>
-        
-        
-        <div class="friend-links">
-            
-            <div class="friend-link">
-                <a target="_blank" rel="noopener" href="https://argvchs.github.io">Argvchs</a>
-            </div>
-            
-        </div>
-        
-    </div>
-</div>
 
-    </div>
-    
-</div>
 
-            <footer id="footer">
-    <div id="footer-wrap">
-        <div>
-            &copy;
-            2022 - 2023 笨笨学中医
-            <span id="footer-icon">
-                <i class="fa-solid fa-font-awesome fa-fw"></i>
-            </span>
-            &commat;benbenit
-        </div>
-        <div>
-            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
-            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
-        </div>
-        
-    </div>
-</footer>
 
-        </div>
-        
-        <transition name="fade">
-            <div id="preview" ref="preview" v-show="previewShow">
-                <img id="preview-content" ref="previewContent" />
-            </div>
-        </transition>
-        
-    </div>
-    <script src="/js/main.js"></script>
-    
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
 </body>
 </html>
